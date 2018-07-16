@@ -80,7 +80,7 @@ int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,coul
 		else
 			mid = 0;
 	}
-	for (count = 0; count < lena2; count++)
+	for (count = 0; count < lena1; count++)
 	{
 		a1[count] += mid;
 		if (a1[count] >= 10)
@@ -291,7 +291,7 @@ int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 	return 0;
 }
 
-int f_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
+int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
 	int finda2;
 	int findb2;
@@ -307,7 +307,7 @@ int f_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 		{
 			while ((count + countp + 1) < lenc2)
 			{
-				c2[count + countp + 1] += b2[count] * a2[countp];
+				c2[count + countp + 1] += (b2[count] * a2[countp]);
 			}
 		}
 	}

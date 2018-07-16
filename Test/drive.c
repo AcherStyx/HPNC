@@ -96,16 +96,26 @@ int main(void)
 	int houmiande=10;
 	printf("%d\n", bfs%houmiande);
 
+	//manage test
+	F_HA_TEST(8);
+	char managep1[10] = { 1,65,23,48,25,48,20,15,26,1 };
+	char managep2[5] = { 5,20,46,23,15 };
+	F_HA_MAP(managep1, managep2, 10, 5);
+	F_HA_PRINT(managep1, managep2, 10, 5, 1);
+
 	//multiplication test
-	printf("[TEST8]\n");
+	printf("[TEST9]\n");
 	char mult1[7] = { 0,0,0,0,0,0,0 };
 	char mult2[3] = { 0,0,0 };
+	F_HA_MU(a1, a2, b1, b2, mult1, mult2, 10, 10, 5, 5, 7, 3);
+	F_HA_PRINT(mult1, mult2, 7, 3, 1);
 
-
-	//stop
+	//pause
 	int quit;
 	for (quit = 0; quit != 1;)
 		scanf("%d", &quit);
+
+
 
 	return 0;
 }
