@@ -106,9 +106,9 @@ int main(void)
 	//multiplication test
 	printf("[TEST9]\n");
 	char mult1[7] = { 0,0,0,0,0,0,0 };
-	char mult2[3] = { 0,0,0 };
-	F_HA_MU(a1, a2, b1, b2, mult1, mult2, 10, 10, 5, 5, 7, 3);
-	F_HA_PRINT(mult1, mult2, 7, 3, 1);
+	char mult2[5] = { 0,0,0,0 };
+	F_HA_MU(a1, a2, b1, b2, mult1, mult2, 10, 10, 5, 5, 7, 5);
+	F_HA_PRINT(mult1, mult2, 7, 5, 1);
 
 	//pause
 	int quit;

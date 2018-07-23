@@ -95,6 +95,26 @@ int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,coul
 	return mid;
 }
 
+int F_HA_MASINGLE(int *temp,int len)
+{
+	int mid=0;/*initializing*/
+	int count;
+
+	for (count = 0; count < len; count++)
+	{
+		temp[count] += mid;
+		if (temp[count] >= 10)
+		{
+			mid = (temp[count] - temp[count] % 10) / 10;
+			temp[count] -= mid * 10;
+		}
+		else
+			mid = 0;
+	}
+
+	return mid;
+}
+
 int F_HA_ACC(char *a1, char *a2, int lena1, int lena2)
 {
 	a2[(lena2 - 1)] += 1;
@@ -297,22 +317,34 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	int findb2;
 	int count;
 	int countp;
+	int *temp;
+
+	temp = (int*)malloc(sizeof(int)*(lena1 + lenb1 + lena2 + lenb2));/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+	for (count = 0; count < (lena1 + lenb1 + lena2 + lenb2 - 1); count++)/*initializing*/
+		temp[count] = 0;
+
+	int stand10 = lena2 + lenb2;
+	int stand20 = lena2 + lenb2 - 1;
 
 	finda2 = F_HA_FIND(a2, lena2, 1);
 	findb2 = F_HA_FIND(b2, lenb2, 1);
 
 	for (count = findb2; count >= 0; count--)
 	{
-		for (countp = finda2; count >= 0; count--)
+		for (countp = finda2; countp >= 0; countp--)
 		{
-			while ((count + countp + 1) < lenc2)
-			{
-				c2[count + countp + 1] += (b2[count] * a2[countp]);
-			}
+			temp[stand20 - count - countp - 1] += (b2[count] * a2[countp]);
 		}
 	}
 
-	F_HA_MAP(c1, c2, lenc1, lenc2);
+	F_HA_MASINGLE(temp, lena1 + lena2 + lenb1 + lenb2);
+
+
+	for (count = 0; count < lenc2; count++)
+		c2[count] = temp[stand20 - count];
+	for (count = 0; count < lenc1; count++)
+		c1[count] = temp[stand10 + count];
+
 
 	return 0;
 }
