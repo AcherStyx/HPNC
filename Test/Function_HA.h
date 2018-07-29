@@ -13,7 +13,7 @@ void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 	for (count = 0; count < lena2; count++)
 		printf("%d", a2[count]);
 
-	if (printenter = 1)
+	if (printenter == 1)
 		printf("\n");
 }
 
@@ -43,6 +43,11 @@ int F_HA_MA(char *a1, char *a2, int lena1, int lena2)//simple manage,only teens
 			a2[count] -= 10;
 			mid = 1;
 		}
+		else if (a2[count] < 0)
+		{
+			a2[count] += 10;
+			mid = -1;
+		}
 		else
 		{
 			mid = 0;
@@ -55,6 +60,11 @@ int F_HA_MA(char *a1, char *a2, int lena1, int lena2)//simple manage,only teens
 		{
 			a1[count] -= 10;
 			mid = 1;
+		}
+		else if (a1[count] < 0)
+		{
+			a1[count] += 10;
+			mid = -1;
 		}
 		else
 		{
@@ -126,14 +136,26 @@ int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
 {
 	if (n <= lena2 && n != 0)
 		a2[lena2 - n] += 1;
-	else if (n > lena2)
+	else if (n > lena2 && n <= (lena1 + lena2))
 		a1[n - lena2 - 1] += 1;
 
 	F_HA_MA(a1, a2, lena1, lena2);
 	return 0;
 }
 
-int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)//返回:a>b 0;a<b 1;a=b 2
+int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
+{
+	if (n <= lena2 && n != 0)
+		a2[lena2 - n] -= 1;
+	else if (n > lena2 && n <= (lena1 + lena2))
+		a1[n - lena2 - 1] -= 1;
+
+	F_HA_MA(a1, a2, lena1, lena2);
+	
+	return 0;
+}
+//返回:a>b 0;a<b 1;a=b 2
+int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)
 {
 	int amaxplace;
 	int bmaxplace;
@@ -142,35 +164,33 @@ int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int len
 	amaxplace = F_HA_FIND(a1, lena1, 1);
 	bmaxplace = F_HA_FIND(b1, lenb1, 1);
 
-	if (amaxplace != 0 || bmaxplace != 0)
-	{
-		if (amaxplace > bmaxplace)
+	if (amaxplace > bmaxplace)
 			return 0;
-		if (amaxplace < bmaxplace)
+	if (amaxplace < bmaxplace)
 			return 1;
-		if (amaxplace = bmaxplace)
+	if (amaxplace == bmaxplace)
+	{
+		if (a1[amaxplace] > b1[bmaxplace])
+			return 0;
+		if (a1[amaxplace] < b1[bmaxplace])
+			return 1;
+		if (a1[amaxplace] == b1[bmaxplace])
 		{
-			if (a1[amaxplace] > b1[bmaxplace])
-				return 0;
-			if (a1[amaxplace] < b1[bmaxplace])
-				return 1;
-			if (a1[amaxplace] = b1[bmaxplace])
+			for (count = amaxplace; count >= 0; count--)
 			{
-				for (count = amaxplace; count >= 0; count--)
-				{
-					if (a2[amaxplace] > b2[bmaxplace])
-						return 0;
-					if (a2[amaxplace] < b2[bmaxplace])
-						return 1;
-				}
+				if (a1[count] > b1[count])
+					return 0;
+				if (a1[count] < b1[count])
+					return 1;
 			}
 		}
 	}
+	
 
-	int placea;
-	int placeb;
 	int len;
 	int mark;
+
+	/*
 	if (lena2 < lenb2)
 	{
 		len = lena2;
@@ -187,33 +207,53 @@ int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int len
 	}
 	if (lena2 = lenb2)
 		len = lena2;
+	*/
 
-	amaxplace = F_HA_FIND(a2, lena2, 0);
-	bmaxplace = F_HA_FIND(b2, lenb2, 0);
+	amaxplace = F_HA_FIND(a2, lena2, 1);
+	bmaxplace = F_HA_FIND(b2, lenb2, 1);
 
+	/*
 	if (amaxplace < bmaxplace)
 		return 0;
 	if (amaxplace > bmaxplace)
 		return 1;
-	if (amaxplace = bmaxplace)
+	if (amaxplace == bmaxplace)
 	{
 		for (count = amaxplace; count <= len; count++)
 		{
-			if (a2[amaxplace] > b2[bmaxplace])
+			if (a2[count] > b2[count])
 				return 0;
-			if (a2[amaxplace] < b2[bmaxplace])
+			if (a2[count] < b2[count])
 				return 1;
 		}
 	}
+	*/
 
-	if (mark == 0)
-		if (placeb > placea)
-			return 1;
-	if (mark == 1)
-		if (placeb < placea)
+	if (amaxplace > bmaxplace)
+	{
+		len = bmaxplace;
+		mark = 0;
+	}
+	if (amaxplace < bmaxplace)
+	{
+		len = amaxplace;
+		mark = 1;
+	}
+	if (amaxplace == bmaxplace)
+	{
+		len = amaxplace;
+		mark = 2;
+	}
+	
+	for (count = 0; count <= len; count++)
+	{
+		if (a2[count] > b2[count])
 			return 0;
+		else if (a2[count] < b2[count])
+			return 1;
+	}
 
-	return 2;
+	return mark;
 }
 
 void F_HA_TEST(short num)
@@ -389,23 +429,48 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
 	int deep = 0;
-	int count;
 	int all = (lena1 + lena2);
 	int fin;
 	int tencount;
+	int check;
+	int count;
 
+	int lenc1 = lena1 * 2;
+	int lenc2 = lena2 * 2;
 	char *c1;
 	char *c2;
-	c1 = (char*)malloc(sizeof(char)*lena1);
-	c2 = (char*)malloc(sizeof(char)*lena2);
+	c1 = (char*)malloc(sizeof(char)*lenc1);
+	c2 = (char*)malloc(sizeof(char)*lenc2);
+	for (count = 0; count < lenc1; count++)
+		c1[count] = 0;
+	for (count = 0; count < lenc2; count++)
+		c2[count] = 0;
 
 	for (deep = all; deep >= 0; deep--)
 	{
 		fin = 0;
-		for (tencount = 0; fin = 0; tencount++)
+		for (tencount = 0; fin == 0 ; tencount++) 
 		{
 			F_HA_ACCP(b1, b2, lenb1, lenb2, deep);
-			F_HA_MU(b1, b2, b1, b2, c1, c2, lenb1, lenb2, lenb1, lenb2, lena1, lena2);
+			F_HA_MU(b1, b2, b1, b2, c1, c2, lenb1, lenb2, lenb1, lenb2, lenc1, lenc2);
+			
+			//TEST
+			printf("[root内部的b和c]%d:",tencount);
+			F_HA_PRINT(b1, b2, lenb1, lenb2, 0);
+			printf(" ");
+			F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			
+			check = F_HA_COMP(a1, a2, c1, c2, lena1, lena2, lenc1, lenc2);
+			if (check == 1)
+			{ 
+				F_HA_ACCM(b1, b2, lenb1, lenb2, deep);
+				fin = 1;
+			}
+			if (check == 2)
+				return 0;
+			if (tencount == 9)
+				fin = 1;
+		
 		}
 	}
 

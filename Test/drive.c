@@ -54,7 +54,11 @@ int main(void)
 	//compare tset
 	printf("【比大小】\n");
 	int compare;
-	compare = F_HA_COMP(a1, a2, b1, b2, 10, 10, 5, 5);
+	char compa1[2] = { 4,0 };
+	char compa2[5] = { 0,0,0,0,0 };
+	char compb1[2] = { 1,0 };
+	char compb2[5] = { 0,0,0,0,0 };
+	compare = F_HA_COMP(compa1, compa2, compb1, compb2, 2, 5, 2, 5);
 	if (compare == 0)
 		printf("a>b");
 	if (compare == 1)
@@ -107,14 +111,14 @@ int main(void)
 
 	//multiplication test
 	printf("【乘法】\n");
-	char yuansu1[5] = { 0,0,0,0,0 };
+	char yuansu1[5] = { 1,0,0,0,0 };
 	char yuansu2[5] = { 0,0,0,0,1 };
-	char yuansu21[5] = { 0,0,0,0,0 };
-	char yuansu22[5] = { 0,0,0,0,1 };
-	char mult1[7] = { 0,0,0,0,0,0,0 };
+	char yuansu21[5] = { 1,0,0,0,0 };
+	char yuansu22[5] = { 0,0,0,0,0 };
+	char mult1[10] = { 0,0,0,0,0,0,0 };
 	char mult2[10] = { 0,0,0,0,0,0,0,0,0,0 };
-	F_HA_MU(a1, a2, b1, b2, mult1, mult2, 5, 5, 5, 5, 7, 10);
-	F_HA_PRINT(mult1, mult2, 7, 10, 1);
+	F_HA_MU(yuansu1, yuansu2, yuansu21, yuansu22, mult1, mult2, 5, 5, 5, 5, 10, 10);
+	F_HA_PRINT(mult1, mult2, 10, 10, 1);
 
 	//malloc test
 	printf("【数组变量定义】\n");
@@ -176,7 +180,7 @@ int main(void)
 	F_HA_PRINT(malout1, malout2, 10, 10, 1);
 
 	//ACCP test
-	printf("【定量积累 测试】\n");
+	printf("【定量积累】\n");
 	char accp1[5] = { 0,0,0,0,0 };
 	char accp2[4] = { 0,0,0,0 };
 	F_HA_ACCP(accp1, accp2, 5, 4, 0);
@@ -184,6 +188,32 @@ int main(void)
 	F_HA_ACCP(accp1, accp2, 5, 4, 8);
 	F_HA_PRINT(accp1, accp2, 5, 4, 1);
 
+
+	//ACCP test
+	printf("【定量减少】\n");
+	char accm1[3] = { 0,0,0 };
+	char accm2[4] = { 0,0,0,0 };
+	F_HA_ACCP(accm1, accm2, 3, 4, 6);
+	F_HA_ACCM(accm1, accm2, 3, 4, 5);
+	F_HA_PRINT(accm1, accm2, 3, 4, 1);
+
+	//root test
+	printf("【开平方根】\n");
+	char rootn1[1] = { 9 };
+	int lenrootn1 = 1;
+	char rootn2[4] = { 5,6,7,5 };
+	int lenrootn2 = 4;
+	char rootm1[1] = { 0 };
+	int lenrootm1 = 1;
+	char rootm2[4] = { 0,0,0,0 };
+	int lenrootm2 = 4;
+	printf("需要开平方的数:");
+	F_HA_PRINT(rootn1, rootn2, lenrootn1, lenrootn2, 1);
+	//conculate
+	F_HA_ROOT(rootn1, rootn2, rootm1, rootm2, lenrootn1, lenrootn2, lenrootm1, lenrootm2);
+	//result
+	printf("结果:");
+	F_HA_PRINT(rootm1, rootm2, lenrootm1, lenrootm2, 1);
 
 	//pause
 	int quit;
