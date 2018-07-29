@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
+#include <math.h>
 #define GET_ARRAY_LEN(array,len){len = (sizeof(array) / sizeof(char));}
 
 /*====================模块工具====================*/
-void F_HA_PRINT(char *a1, char *a2, short lena1, short lena2,short printenter)
+void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 {
 	int count;
 	for (count = (lena1 - 1); count >= 0; count--)
@@ -122,7 +122,18 @@ int F_HA_ACC(char *a1, char *a2, int lena1, int lena2)
 	return 0;
 }
 
-int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,short lena1,short lena2,short lenb1,short lenb2)//返回:a>b 0;a<b 1;a=b 2
+int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
+{
+	if (n <= lena2 && n != 0)
+		a2[lena2 - n] += 1;
+	else if (n > lena2)
+		a1[n - lena2 - 1] += 1;
+
+	F_HA_MA(a1, a2, lena1, lena2);
+	return 0;
+}
+
+int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)//返回:a>b 0;a<b 1;a=b 2
 {
 	int amaxplace;
 	int bmaxplace;
@@ -323,12 +334,14 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	for (count = 0; count < (lena1 + lenb1 + lena2 + lenb2 - 1); count++)/*initializing*/
 		temp[count] = 0;
 
+
 	int stand10 = lena2 + lenb2;
 	int stand20 = lena2 + lenb2 - 1;
 
 	finda2 = F_HA_FIND(a2, lena2, 1);
 	findb2 = F_HA_FIND(b2, lenb2, 1);
 
+	
 	for (count = findb2; count >= 0; count--)
 	{
 		for (countp = finda2; countp >= 0; countp--)
@@ -337,6 +350,31 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 		}
 	}
 
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand10 + count + countp] += (b1[count] * a1[countp]);
+		}
+	}
+	
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp <= finda2; countp++)
+		{
+			temp[stand20 + count - countp] += (b1[count] * a2[countp]);
+		}
+	}
+
+	for (count = 0; count <= findb2; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand20 + countp - count] += (a1[countp] * b2[count]);
+		}
+	}
+
+	
 	F_HA_MASINGLE(temp, lena1 + lena2 + lenb1 + lenb2);
 
 
@@ -345,26 +383,33 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	for (count = 0; count < lenc1; count++)
 		c1[count] = temp[stand10 + count];
 
-
 	return 0;
 }
 
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
-	int ok = 0;
+	int deep = 0;
 	int count;
+	int all = (lena1 + lena2);
+	int fin;
+	int tencount;
 
-	for (count = 0; count < (10 ^ (lena1 + lena2)-1); count++)
+	char *c1;
+	char *c2;
+	c1 = (char*)malloc(sizeof(char)*lena1);
+	c2 = (char*)malloc(sizeof(char)*lena2);
+
+	for (deep = all; deep >= 0; deep--)
 	{
-		F_HA_ACC(b1, b2, lenb1, lenb2);
-
-
-		if (ok = 1)
-			return 0;
+		fin = 0;
+		for (tencount = 0; fin = 0; tencount++)
+		{
+			F_HA_ACCP(b1, b2, lenb1, lenb2, deep);
+			F_HA_MU(b1, b2, b1, b2, c1, c2, lenb1, lenb2, lenb1, lenb2, lena1, lena2);
+		}
 	}
 
-
-	return  0;
+	return 0;
 }
 
 /*====================程序报错====================*/
