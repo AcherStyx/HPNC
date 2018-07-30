@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define GET_ARRAY_LEN(array,len){len = (sizeof(array) / sizeof(char));}
-
-/*====================模块工具====================*/
+#include <malloc.h>
+/*====================工具函数====================*/
 void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 {
 	int count;
@@ -170,7 +169,7 @@ int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
 	
 	return 0;
 }
-//返回:a>b 0;a<b 1;a=b 2
+
 int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)
 {
 	int amaxplace;
@@ -276,11 +275,30 @@ void F_HA_TEST(short num)
 {
 	printf("[TEST%d]:\n", num);
 }
-/*====================加法运算====================*/
+
+void F_HA_ZEROS(char *a, int len)
+{
+	int count;
+	for (count = 0; count < len; count++)
+		a[count] = 0;
+}
+
+void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
+{
+	int count;
+	for (count = 0; count < lena1; count++)
+		a1[count] = 0;
+	for (count = 0; count < lena2; count++)
+		a2[count] = 0;
+}
+/*====================运算函数====================*/
 int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
 	int error = 0;
 	int count;
+
+	//Initializing C
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
 
 	//找到右边符合要求，能正常完成运算的最后一位
 	int find = 0;
@@ -341,6 +359,9 @@ int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)//默认认为a>b
 {
+	//Initializing C
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
 	int error = 0;
 	short count = 0;
 	char mid=0;
@@ -380,6 +401,9 @@ int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
+	//Initializing C
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
 	int finda2;
 	int findb2;
 	int count;
@@ -402,9 +426,9 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 		lentemp = (lenc1 + lenc2) * 2;
 	}
 
-	temp = (int*)malloc(sizeof(int)*lentemp+2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+	temp = (int*)malloc(sizeof(int)*lentemp + 2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
 	
-	for (count = 0; count < (lentemp + 1); count++)/*initializing*/
+	for (count = 0; count < (lentemp); count++)/*initializing*/
 		temp[count] = 0;
 
 	
@@ -460,11 +484,16 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	for (count = 0; count < lenc1; count++)
 		c1[count] = temp[stand10 + count];
 
+	free(temp);
+
 	return 0;
 }
 
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
+	//Initialzing B
+	F_HA_ZEROD(b1, b2, lenb1, lenb2);
+
 	int deep = 0;
 	int all;
 	int all1;
@@ -505,12 +534,14 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 			F_HA_ACCP(b1, b2, lenb1, lenb2, deep);
 			F_HA_MU(b1, b2, b1, b2, c1, c2, lenb1, lenb2, lenb1, lenb2, lenc1, lenc2);
 			
+			/*
 			//TEST
 			printf("[root内部的b和c]%d:",tencount);
 			F_HA_PRINT(b1, b2, lenb1, lenb2, 0);
 			printf(" ");
 			F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
-			
+			*/
+
 			check = F_HA_COMP(a1, a2, c1, c2, lena1, lena2, lenc1, lenc2);
 			if (check == 1)
 			{ 
@@ -528,11 +559,19 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 	return 0;
 }
 
-/*====================程序报错====================*/
-//00000010 前端溢出
-//00000001 后端溢出
-//
+/*
+====================程序报错====================
+##加法
+00000010 前端溢出
+00000001 后端溢出
 
-/*====================必要说明====================*/
-//数组中0为最接近小数点的一位
-//数组长度不能为0
+##比大小返回:
+a>b 0
+a<b 1
+a=b 2
+
+====================必要说明====================
+数组中0为最接近小数点的一位
+数组长度不能为0（？）
+
+*/

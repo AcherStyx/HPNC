@@ -210,12 +210,10 @@ int main(void)
 	int lenrootn1 = 1;
 	char rootn2[4] = { 5,6,7,5 };
 	int lenrootn2 = 4;
-	char rootm1[1] = { 0 };
+	char rootm1[1];
 	int lenrootm1 = 1;
-	char rootm2[50];
-	int lenrootm2 = 50;
-	for (count = 0; count < lenrootm2; count++)
-		rootm2[count] = 0;
+	char rootm2[1000];
+	int lenrootm2 = 1000;
 	printf("需要开平方的数:");
 	F_HA_PRINT(rootn1, rootn2, lenrootn1, lenrootn2, 1);
 	//conculate
