@@ -17,6 +17,22 @@ void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 		printf("\n");
 }
 
+void F_HA_PRINTS(int *a, int len, int start, int enter)
+{
+	int count;
+	if (start == 0)
+	{
+		for (count = 0; count < len; count++)
+			printf("%d", a[count]);
+	}
+	else
+		for (count = (len - 1); count >= 0; count--)
+			printf("%d", a[count]);
+
+	if (enter != 0)
+		printf("\n");
+}
+
 int F_HA_FIND(char *a,int lena,char where)
 {
 	int count = 0;
@@ -369,14 +385,30 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	int count;
 	int countp;
 	int *temp;
+	int lentemp;
+	int stand10;
+	int stand20;
 
-	temp = (int*)malloc(sizeof(int)*(lena1 + lenb1 + lena2 + lenb2));/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
-	for (count = 0; count < (lena1 + lenb1 + lena2 + lenb2 - 1); count++)/*initializing*/
+	if ((lena1 + lenb1 + lena2 + lenb2 + 2) > ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lena2 + lenb2;
+		stand20 = lena2 + lenb2 - 1;
+		lentemp = lena1 + lenb1 + lena2 + lenb2 + 2;
+	}
+	if ((lena1 + lenb1 + lena2 + lenb2 + 2) <= ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lenc2 * 2;
+		stand20 = lenc2 * 2 - 1;
+		lentemp = (lenc1 + lenc2) * 2;
+	}
+
+	temp = (int*)malloc(sizeof(int)*lentemp+2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+	
+	for (count = 0; count < (lentemp + 1); count++)/*initializing*/
 		temp[count] = 0;
 
+	
 
-	int stand10 = lena2 + lenb2;
-	int stand20 = lena2 + lenb2 - 1;
 
 	finda2 = F_HA_FIND(a2, lena2, 1);
 	findb2 = F_HA_FIND(b2, lenb2, 1);
@@ -415,8 +447,13 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	}
 
 	
-	F_HA_MASINGLE(temp, lena1 + lena2 + lenb1 + lenb2);
+	F_HA_MASINGLE(temp, lentemp);
 
+	//TEST
+	//printf("[乘法 内部temp]:");
+	//for (count = lentemp - 1; count >= 0; count--)
+	//	printf("%d", temp[count]);
+	//printf("\n");
 
 	for (count = 0; count < lenc2; count++)
 		c2[count] = temp[stand20 - count];
@@ -429,27 +466,41 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
 	int deep = 0;
-	int all = (lena1 + lena2);
+	int all;
+	int all1;
+	int all2;
 	int fin;
 	int tencount;
 	int check;
 	int count;
 
-	int lenc1 = lena1 * 2;
-	int lenc2 = lena2 * 2;
+	if (lena1 > (lenb1 * 2))
+		all1 = lena1;
+	else
+		all1 = lenb1 * 2;
+
+	if (lena2 > (lenb2) * 2)
+		all2 = lena2;
+	else
+		all2 = lenb2 * 2;
+
+	all = all1 + all2;//注意是一和二
+
+	int lenc1 = all1;
+	int lenc2 = all2;
 	char *c1;
 	char *c2;
 	c1 = (char*)malloc(sizeof(char)*lenc1);
-	c2 = (char*)malloc(sizeof(char)*lenc2);
+	c2 = (char*)malloc(sizeof(char)*lenc2+2);
 	for (count = 0; count < lenc1; count++)
 		c1[count] = 0;
-	for (count = 0; count < lenc2; count++)
+	for (count = 0; count < (lenc2+2); count++)
 		c2[count] = 0;
 
 	for (deep = all; deep >= 0; deep--)
 	{
 		fin = 0;
-		for (tencount = 0; fin == 0 ; tencount++) 
+		for (tencount = 1; fin == 0 ; tencount++) 
 		{
 			F_HA_ACCP(b1, b2, lenb1, lenb2, deep);
 			F_HA_MU(b1, b2, b1, b2, c1, c2, lenb1, lenb2, lenb1, lenb2, lenc1, lenc2);

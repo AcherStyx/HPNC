@@ -111,18 +111,25 @@ int main(void)
 
 	//multiplication test
 	printf("【乘法】\n");
-	char yuansu1[5] = { 1,0,0,0,0 };
-	char yuansu2[5] = { 0,0,0,0,1 };
-	char yuansu21[5] = { 1,0,0,0,0 };
-	char yuansu22[5] = { 0,0,0,0,0 };
+	char yuansu1[5] = { 9,9,9,9,9 };
+	char yuansu2[5] = { 9,9,9,9,9 };
+	char yuansu21[5] = { 9,9,9,9,9 };
+	char yuansu22[5] = { 9,9,9,9,9 };
 	char mult1[10] = { 0,0,0,0,0,0,0 };
 	char mult2[10] = { 0,0,0,0,0,0,0,0,0,0 };
+	//元素
+	printf("a:");
+	F_HA_PRINT(yuansu1, yuansu2, 5, 5, 1);
+	printf("b:");
+	F_HA_PRINT(yuansu21, yuansu22, 5, 5, 1);
 	F_HA_MU(yuansu1, yuansu2, yuansu21, yuansu22, mult1, mult2, 5, 5, 5, 5, 10, 10);
+	//结果
+	printf("结果:");
 	F_HA_PRINT(mult1, mult2, 10, 10, 1);
 
 	//malloc test
 	printf("【数组变量定义】\n");
-	char * mal1;
+	char * mal1; 
 	char * mal2;
 	mal1 = (char*)malloc(sizeof(char) * 8);
 	mal2 = (char*)malloc(sizeof(char) * 5);
@@ -205,8 +212,10 @@ int main(void)
 	int lenrootn2 = 4;
 	char rootm1[1] = { 0 };
 	int lenrootm1 = 1;
-	char rootm2[4] = { 0,0,0,0 };
-	int lenrootm2 = 4;
+	char rootm2[50];
+	int lenrootm2 = 50;
+	for (count = 0; count < lenrootm2; count++)
+		rootm2[count] = 0;
 	printf("需要开平方的数:");
 	F_HA_PRINT(rootn1, rootn2, lenrootn1, lenrootn2, 1);
 	//conculate
