@@ -230,6 +230,30 @@ int main(void)
 	printf("结果:");
 	F_HA_PRINT(rootm1, rootm2, lenrootm1, lenrootm2, 1);
 
+	//float test
+	printf("【Float】\n");
+	float flo = 133.567;
+	printf("原float类型数值：%f\n", flo);
+	int floget1;
+	int floget2;
+	int floget;
+	int floget3;
+	float volum = 100;
+	floget1 = flo / volum;
+	printf("中间值1：%d\n", floget1);
+	floget2 = (flo / volum) / 10;
+	printf("中间值2：%d\n", floget2);
+	floget = floget1 - floget2 * 10;
+	printf("分解得到的值：%d\n", floget);
+
+	//muf test
+	printf("【乘法 简化】\n");
+	flo = 2.2;
+	char floc1[10];
+	char floc2[10];
+	F_HA_MUF(a1, a2, flo, floc1, floc2, 10, 10, 10, 10);
+	F_HA_PRINT(floc1, floc2, 10, 10, 1);
+
 	//pi
 	printf("【圆周率】\n");
 	int pcount;
@@ -266,7 +290,7 @@ int main(void)
 	char ps2[1000];
 	int lenps2 = 1000;
 	char ps21[1];
-	int lenps21[1] = 1;
+	int lenps21 = 1;
 	char ps22[1000];
 	int lenps22 = 1000;
 	char ps31[1];

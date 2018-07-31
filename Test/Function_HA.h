@@ -311,11 +311,57 @@ void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int
 
 	for (count = 0; count < len1; count++)
 		b1[count] = a1[count];
-	for (count = 0, count < len2; count++)
+	for (count = 0; count < len2; count++)
 		b2[count] = a2[count];
 
 
 }
+
+void F_HA_TRANS(float flo, char *a1, char *a2, int lena1, int lena2)
+{
+	int floget1;
+	int floget2;
+	int floget;
+	int floget3;
+	float volum;
+
+	volum = 100;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a1[2] = floget;
+
+	volum = 10;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a1[1] = floget;
+
+	volum = 1;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a1[0] = floget;
+
+	volum = 0.1;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a2[0] = floget;
+
+	volum = 0.01;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a2[1] = floget;
+
+	volum = 0.001;
+	floget1 = flo / volum;
+	floget2 = (flo / volum) / 10;
+	floget = floget1 - floget2 * 10;
+	a2[2] = floget;
+}
+
 /*====================运算函数====================*/
 int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
@@ -514,6 +560,103 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	return 0;
 }
 
+int F_HA_MUF(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
+{
+	//Initializing C
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	int finda2;
+	int findb2;
+	int count;
+	int countp;
+	int *temp;
+	int lentemp;
+	int stand10;
+	int stand20;
+
+	//这个函数新增的部分，用来吧float转化为之后运算用的数字
+	char b1[3] = { 0,0,0 };
+	char b2[3] = { 0,0,0 };
+	int lenb1 = 3;
+	int lenb2 = 3;
+	F_HA_TRANS(b, b1, b2, lenb1, lenb2);
+
+	if ((lena1 + lenb1 + lena2 + lenb2 + 2) > ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lena2 + lenb2;
+		stand20 = lena2 + lenb2 - 1;
+		lentemp = lena1 + lenb1 + lena2 + lenb2 + 2;
+	}
+	if ((lena1 + lenb1 + lena2 + lenb2 + 2) <= ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lenc2 * 2;
+		stand20 = lenc2 * 2 - 1;
+		lentemp = (lenc1 + lenc2) * 2;
+	}
+
+	temp = (int*)malloc(sizeof(int)*lentemp + 2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+
+	for (count = 0; count < (lentemp); count++)/*initializing*/
+		temp[count] = 0;
+
+
+
+
+	finda2 = F_HA_FIND(a2, lena2, 1);
+	findb2 = F_HA_FIND(b2, lenb2, 1);
+
+
+	for (count = findb2; count >= 0; count--)
+	{
+		for (countp = finda2; countp >= 0; countp--)
+		{
+			temp[stand20 - count - countp - 1] += (b2[count] * a2[countp]);
+		}
+	}
+
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand10 + count + countp] += (b1[count] * a1[countp]);
+		}
+	}
+
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp <= finda2; countp++)
+		{
+			temp[stand20 + count - countp] += (b1[count] * a2[countp]);
+		}
+	}
+
+	for (count = 0; count <= findb2; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand20 + countp - count] += (a1[countp] * b2[count]);
+		}
+	}
+
+
+	F_HA_MASINGLE(temp, lentemp);
+
+	//TEST
+	//printf("[乘法 内部temp]:");
+	//for (count = lentemp - 1; count >= 0; count--)
+	//	printf("%d", temp[count]);
+	//printf("\n");
+
+	for (count = 0; count < lenc2; count++)
+		c2[count] = temp[stand20 - count];
+	for (count = 0; count < lenc1; count++)
+		c1[count] = temp[stand10 + count];
+
+	free(temp);
+
+	return 0;
+}
+
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
 	//Initialzing B
@@ -586,11 +729,13 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 
 int F_HA_DIV(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
-
+	
 
 
 	return 0;
 }
+
+
 /*
 ====================程序报错====================
 ##加法
