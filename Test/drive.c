@@ -164,6 +164,11 @@ int main(void)
 		printf("%d", mali2[count]);
 	printf("\n");
 
+	free(mali1);
+	free(mali2);
+	free(mal1);
+	free(mal2);
+
 	//malloc test 2
 	printf("【变量定义数组 乘法】\n");
 	char * mal21;
@@ -185,6 +190,9 @@ int main(void)
 	char malout2[10];
 	F_HA_MU(mal1, mal2, mal21, mal22, malout1, malout2, 8, 5, 8, 5, 10, 10);
 	F_HA_PRINT(malout1, malout2, 10, 10, 1);
+
+	free(mal21);
+	free(mal22);
 
 	//ACCP test
 	printf("【定量积累】\n");
@@ -212,8 +220,8 @@ int main(void)
 	int lenrootn2 = 4;
 	char rootm1[1];
 	int lenrootm1 = 1;
-	char rootm2[1000];
-	int lenrootm2 = 1000;
+	char rootm2[100];
+	int lenrootm2 = 100;
 	printf("需要开平方的数:");
 	F_HA_PRINT(rootn1, rootn2, lenrootn1, lenrootn2, 1);
 	//conculate
@@ -221,6 +229,79 @@ int main(void)
 	//result
 	printf("结果:");
 	F_HA_PRINT(rootm1, rootm2, lenrootm1, lenrootm2, 1);
+
+	//pi
+	printf("【圆周率】\n");
+	int pcount;
+	//n
+	char pn1[10] = { 6,0,0,0,0,0,0,0,0,0 };
+	int lenpn1 = 10;
+	char pn2[1] = { 0 };
+	int lenpn2 = 1;
+	char pn21[10];
+	int lenpn21 = 10;
+	char pn22[1];
+	int lenpn22 = 1;
+	//x
+	char px1[1] = { 1 };
+	int lenpx1 = 1;
+	char px2[1000];
+	int lenpx2 = 1000;
+	//h
+	char ph1[1];
+	int lenph1 = 1;
+	char ph2[1000];
+	int lenph2 = 1000;
+	char ph21[1];
+	int lenph21 = 1;
+	char ph22[1000];
+	int lenph22 = 1000;
+	char ph31[1];
+	int lenph31 = 1;
+	char ph32[1];
+	int lenph32 = 1;
+	//s
+	char ps1[1];
+	int lenps1 = 1;
+	char ps2[1000];
+	int lenps2 = 1000;
+	char ps21[1];
+	int lenps21[1] = 1;
+	char ps22[1000];
+	int lenps22 = 1000;
+	char ps31[1];
+	int lenps31 = 1;
+	char ps32[1000];
+	int lenps32 = 1000;
+	//2
+	char p21[1] = { 2 };
+	int lenp21 = 1;
+	char p22[1];
+	int lenp22 = 1;
+	//0.5
+	char p51[1] = { 0 };
+	int lenp51 = 1;
+	char p52[1] = { 5 };
+	int lenp52 = 1;
+	//1
+	char p11[1] = { 1 };
+	int lenp11 = 1;
+	char p12[1] = { 0 };
+	int lenp12 = 1;
+
+
+
+	F_HA_MU(pn1, pn2, px1, px2, ps21, ps22, lenpn1, lenpn2, lenpx1, lenpx2, lenps21, lenps22);
+	F_HA_MU(ph1, ph2, p51, p52, ps31, ps32, lenph1, lenph2, lenp51, lenp52, lenps31, lenps32);
+	F_HA_MU(ps21, ps22, ps31, ps32, ps1, ps2, lenps21, lenps22, lenps31, lenps32, lenps1, lenps2);
+	
+	for (pcount = 1; count < 10; count++)
+	{
+		F_HA_MU(pn1, pn2, p21, p22, pn21, pn22, lenpn1, lenpn2, lenp21, lenp22, lenpn21, lenpn22);
+		F_HA_MOVE(pn21, pn22, pn1, pn2, lenpn21, lenpn22, lenpn1, lenpn2);
+
+
+	}
 
 	//pause
 	int quit;

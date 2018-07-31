@@ -291,6 +291,31 @@ void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
 	for (count = 0; count < lena2; count++)
 		a2[count] = 0;
 }
+
+void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
+{
+	int count;
+	int len1;
+	int len2;
+
+	F_HA_ZEROD(b1, b2, lenb1, lenb2);
+	//the smaller one
+	if (lena1 > lenb1)
+		len1 = lenb1;
+	else
+		len1 = lena1;
+	if (lena2 > lenb2)
+		len2 = lenb2;
+	else
+		len2 = lena2;
+
+	for (count = 0; count < len1; count++)
+		b1[count] = a1[count];
+	for (count = 0, count < len2; count++)
+		b2[count] = a2[count];
+
+
+}
 /*====================运算函数====================*/
 int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
@@ -559,6 +584,13 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 	return 0;
 }
 
+int F_HA_DIV(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
+{
+
+
+
+	return 0;
+}
 /*
 ====================程序报错====================
 ##加法
