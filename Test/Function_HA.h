@@ -727,26 +727,88 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 	return 0;
 }
 
-int F_HA_DIV(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
+int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
 	int count;
 	int tencount;
+	int ok = 0;
+	int check;
 
+	//Create array a
+	char *a1;
+	char *a2;
+	a1 = (char*)malloc(sizeof(char)*lena1);
+	a2 = (char*)malloc(sizeof(char)*lena2);
+	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
+	char *a31;
+	char *a32;
+	a31 = (char*)malloc(sizeof(char)*lena1);
+	a32 = (char*)malloc(sizeof(char)*lena2);
+
+	//Create array d
 	char *d1;
 	char *d2;
+	int lend1 = lenc1 + lenb1;
+	int lend2 = lenc2 + lenb2;
+	d1 = (char*)malloc(sizeof(char)*lend1);
+	d2 = (char*)malloc(sizeof(char)*lend2);
+
+	F_HA_ZEROD(d1, d2, lend1, lend2);
 
 	for (count = lenc1; count >= 0; count--)
 	{
-		for (tencount = 0; tencount < 9; tencount++)
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
 		{
-			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2 + 1);
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
 
+	for (count = 0; count < lenc2; count++)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
 		}
 	}
 
 
 	return 0;
 }
+
 
 
 /*

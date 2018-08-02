@@ -5,7 +5,7 @@
 
 int main(void)
 {
-	char a1[10] = { 0,0,9,0,0,0,0,0,0,0 };
+	char a1[10] = { 0,0,9,8,0,0,0,8,0,0 };
 	char a2[10] = { 0,0,0,1,0,0,1,0,2,4 };
 	char b1[5] = { 1,8,5,6,4 };
 	char b2[5] = { 8,1,2,6,4 };
@@ -261,6 +261,22 @@ int main(void)
 	mallocs[1] = 2;
 	free(mallocs);
 
+	//division test
+	printf("¡¾³ý·¨¡¿\n");
+	char divi1[2] = { 5,1 };
+	char divi2[2] = { 9,7 };
+	char div1[10];
+	char div2[10];
+	printf("a=");
+	F_HA_PRINT(a1, a2, lena1, lena2, 1);
+	printf("b=");
+	F_HA_PRINT(divi1, divi2, 2, 2, 1);
+	printf("a/b=");
+	F_HA_ZEROD(div1, div2, 10, 10);
+	F_HA_DIV(a1, a2, divi1, divi2, div1, div2, 10, 10, 2, 2, 10, 10);
+	F_HA_PRINT(div1, div2, 10, 10, 1);
+
+	/*
 	//pi
 	printf("¡¾Ô²ÖÜÂÊ¡¿\n");
 	int pcount;
@@ -278,6 +294,14 @@ int main(void)
 	int lenpx1 = 1;
 	char px2[1000];
 	int lenpx2 = 1000;
+	char px21[1];
+	int lenpx21 = 1;
+	char px22[1000];
+	int lenpx22 = 1000;
+	char px31[1];
+	int lenpx31 = 1;
+	char px32[1000];
+	int lenpx32 = 1000;
 	//h
 	char ph1[1];
 	int lenph1 = 1;
@@ -320,19 +344,32 @@ int main(void)
 	char p12[1] = { 0 };
 	int lenp12 = 1;
 
+	for (pcount = 1; count < 10; count++)
+	{
+		F_HA_DIV(px1, px2, p21, p22, px21, px22, lenpx1, lenpx2, lenp21, lenp22, lenpx21, lenpx22);
+		F_HA_MU(px21, px22, px21, px22, px31, px32, lenpx21, lenpx22, lenpx21, lenpx22, lenpx31, lenpx32);
+		F_HA_M(p11, p12, px31, px32, ph21, ph22, lenp11, lenp12, lenpx31, lenpx32, lenph1, lenph2);
+		F_HA_ROOT(ph21, ph22, ph1, ph2, lenph21, lenph22, lenph1, lenph2);
 
+		F_HA_DIV(px1, px2, p21, p22, px21, px22, lenpx1, lenpx2, lenp21, lenp22, lenpx21, lenpx22);
+		F_HA_M(p11, p12, ph1, ph2, ph21, ph22, lenp11, lenp12, lenph1, lenph2, lenph21, lenph22);
+		F_HA_P(px21, px22, ph21, ph22, px31, px32, lenpx21, lenpx22, lenph21, lenph22, lenpx31, lenpx32);
+		F_HA_ROOT(px31, px32, px1, px2, lenpx31, lenpx32, lenpx1, lenpx2);
+		
+		F_HA_MU(pn1, pn2, p21, p22, pn21, pn22, lenpn1, lenpn2, lenp21, lenp22, lenpn21, lenpn22);
+		F_HA_MOVE(pn21, pn22, pn1, pn2, lenpn21, lenpn22, lenpn1, lenpn2);
+	}
+
+	F_HA_DIV(px1, px2, p21, p22, px21, px22, lenpx1, lenpx2, lenp21, lenp22, lenpx21, lenpx22);
+	F_HA_MU(px21, px22, px21, px22, px31, px32, lenpx21, lenpx22, lenpx21, lenpx22, lenpx31, lenpx32);
+	F_HA_M(p11, p12, px31, px32, ph21, ph22, lenp11, lenp12, lenpx31, lenpx32, lenph1, lenph2);
+	F_HA_ROOT(ph21, ph22, ph1, ph2, lenph21, lenph22, lenph1, lenph2);
 
 	F_HA_MU(pn1, pn2, px1, px2, ps21, ps22, lenpn1, lenpn2, lenpx1, lenpx2, lenps21, lenps22);
 	F_HA_MU(ph1, ph2, p51, p52, ps31, ps32, lenph1, lenph2, lenp51, lenp52, lenps31, lenps32);
 	F_HA_MU(ps21, ps22, ps31, ps32, ps1, ps2, lenps21, lenps22, lenps31, lenps32, lenps1, lenps2);
-	
-	for (pcount = 1; count < 10; count++)
-	{
-		F_HA_MU(pn1, pn2, p21, p22, pn21, pn22, lenpn1, lenpn2, lenp21, lenp22, lenpn21, lenpn22);
-		F_HA_MOVE(pn21, pn22, pn1, pn2, lenpn21, lenpn22, lenpn1, lenpn2);
-
-
-	}
+	F_HA_PRINT(ps1, ps2, lenps1, lenps2, 1);
+	*/
 
 	//pause
 	int quit;
