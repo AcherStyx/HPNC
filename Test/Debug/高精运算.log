@@ -15,15 +15,17 @@ e:\[工程项目]\[github]\hpnc\test\function_ha.h(358): warning C4305: “=”:
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(359): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(360): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(325): warning C4101: “floget3”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(735): warning C4101: “d1”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(736): warning C4101: “d2”: 未引用的局部变量
 e:\[工程项目]\[github]\hpnc\test\drive.c(242): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\drive.c(244): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\drive.c(251): warning C4305: “=”: 从“double”到“float”截断
 e:\[工程项目]\[github]\hpnc\test\drive.c(235): warning C4305: “初始化”: 从“double”到“float”截断
-e:\[工程项目]\[github]\hpnc\test\drive.c(281): warning C4101: “ph22”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\drive.c(288): warning C4101: “ph22”: 未引用的局部变量
 e:\[工程项目]\[github]\hpnc\test\drive.c(240): warning C4101: “floget3”: 未引用的局部变量
-e:\[工程项目]\[github]\hpnc\test\drive.c(283): warning C4101: “ph31”: 未引用的局部变量
-e:\[工程项目]\[github]\hpnc\test\drive.c(285): warning C4101: “ph32”: 未引用的局部变量
-e:\[工程项目]\[github]\hpnc\test\drive.c(279): warning C4101: “ph21”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\drive.c(290): warning C4101: “ph31”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\drive.c(292): warning C4101: “ph32”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\drive.c(286): warning C4101: “ph21”: 未引用的局部变量
   Function_HA.h
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(329): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(330): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
@@ -41,4 +43,6 @@ e:\[工程项目]\[github]\hpnc\test\function_ha.h(358): warning C4305: “=”:
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(359): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(360): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(325): warning C4101: “floget3”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(735): warning C4101: “d1”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(736): warning C4101: “d2”: 未引用的局部变量
   高精运算.vcxproj -> E:\[工程项目]\[GitHub]\HPNC\Test\Debug\高精运算.exe

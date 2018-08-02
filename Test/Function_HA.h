@@ -484,22 +484,22 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	int stand10;
 	int stand20;
 
-	if ((lena1 + lenb1 + lena2 + lenb2 + 2) > ((lenc1 + lenc2) * 2))
+	if ((lena1 + lenb1 + lena2 + lenb2) > ((lenc1 + lenc2) * 2))
 	{
 		stand10 = lena2 + lenb2;
 		stand20 = lena2 + lenb2 - 1;
 		lentemp = lena1 + lenb1 + lena2 + lenb2 + 2;
 	}
-	if ((lena1 + lenb1 + lena2 + lenb2 + 2) <= ((lenc1 + lenc2) * 2))
+	if ((lena1 + lenb1 + lena2 + lenb2) <= ((lenc1 + lenc2) * 2))
 	{
 		stand10 = lenc2 * 2;
 		stand20 = lenc2 * 2 - 1;
 		lentemp = (lenc1 + lenc2) * 2;
 	}
 
-	temp = (int*)malloc(sizeof(int)*lentemp + 2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+	temp = (int*)malloc(sizeof(int)*lentemp);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
 	
-	for (count = 0; count < (lentemp); count++)/*initializing*/
+	for (count = 0; count < lentemp; count++)/*initializing*/
 		temp[count] = 0;
 
 	
@@ -581,20 +581,20 @@ int F_HA_MUF(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int len
 	int lenb2 = 3;
 	F_HA_TRANS(b, b1, b2, lenb1, lenb2);
 
-	if ((lena1 + lenb1 + lena2 + lenb2 + 2) > ((lenc1 + lenc2) * 2))
+	if ((lena1 + lenb1 + lena2 + lenb2) > ((lenc1 + lenc2) * 2))
 	{
 		stand10 = lena2 + lenb2;
 		stand20 = lena2 + lenb2 - 1;
 		lentemp = lena1 + lenb1 + lena2 + lenb2 + 2;
 	}
-	if ((lena1 + lenb1 + lena2 + lenb2 + 2) <= ((lenc1 + lenc2) * 2))
+	if ((lena1 + lenb1 + lena2 + lenb2) <= ((lenc1 + lenc2) * 2))
 	{
 		stand10 = lenc2 * 2;
 		stand20 = lenc2 * 2 - 1;
 		lentemp = (lenc1 + lenc2) * 2;
 	}
 
-	temp = (int*)malloc(sizeof(int)*lentemp + 2);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+	temp = (int*)malloc(sizeof(int)*lentemp);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
 
 	for (count = 0; count < (lentemp); count++)/*initializing*/
 		temp[count] = 0;
@@ -729,7 +729,20 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 
 int F_HA_DIV(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
-	
+	int count;
+	int tencount;
+
+	char *d1;
+	char *d2;
+
+	for (count = lenc1; count >= 0; count--)
+	{
+		for (tencount = 0; tencount < 9; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2 + 1);
+
+		}
+	}
 
 
 	return 0;

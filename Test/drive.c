@@ -254,6 +254,13 @@ int main(void)
 	F_HA_MUF(a1, a2, flo, floc1, floc2, 10, 10, 10, 10);
 	F_HA_PRINT(floc1, floc2, 10, 10, 1);
 
+	//malloc size test
+	char *mallocs;
+	mallocs = (char*)malloc(sizeof(char) * 2);
+	mallocs[0] = 1;
+	mallocs[1] = 2;
+	free(mallocs);
+
 	//pi
 	printf("°æ‘≤÷‹¬ °ø\n");
 	int pcount;
