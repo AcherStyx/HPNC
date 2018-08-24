@@ -317,19 +317,24 @@ void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int
 
 }
 
-void F_HA_TRANS(float flo, char *a1, char *a2, int lena1, int lena2)
+void F_HA_TRANS(double flo, char *a1, char *a2, int lena1, int lena2)
 {
 	int floget1;
 	int floget2;
 	int floget;
 	int floget3;
-	float volum;
+	double volum;
 
-	volum = 100;
-	floget1 = flo / volum;
-	floget2 = (flo / volum) / 10;
-	floget = floget1 - floget2 * 10;
-	a1[2] = floget;
+	F_HA_ZEROD(a1, a2, lena1, lena2);
+
+	if (lena1 >= 3)
+	{
+		volum = 100;
+		floget1 = flo / volum;
+		floget2 = (flo / volum) / 10;
+		floget = floget1 - floget2 * 10;
+		a1[2] = floget;
+	}
 
 	volum = 10;
 	floget1 = flo / volum;
@@ -355,11 +360,14 @@ void F_HA_TRANS(float flo, char *a1, char *a2, int lena1, int lena2)
 	floget = floget1 - floget2 * 10;
 	a2[1] = floget;
 
-	volum = 0.001;
-	floget1 = flo / volum;
-	floget2 = (flo / volum) / 10;
-	floget = floget1 - floget2 * 10;
-	a2[2] = floget;
+	if (lena2 >= 3)
+	{
+		volum = 0.001;
+		floget1 = flo / volum;
+		floget2 = (flo / volum) / 10;
+		floget = floget1 - floget2 * 10;
+		a2[2] = floget;
+	}
 }
 
 /*====================运算函数====================*/
@@ -560,7 +568,104 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 	return 0;
 }
 
-int F_HA_MUF(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
+int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, short lenc1, short lenc2)
+{
+	//Initializing C
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	int finda2;
+	int findb2;
+	int count;
+	int countp;
+	int *temp;
+	int lentemp;
+	int stand10;
+	int stand20;
+
+	char a1[3];
+	char a2[3];
+	int lena1 = 3;
+	int lena2 = 3;
+	
+	F_HA_TRANS(a, a1, a2, lena1, lena2);
+
+	if ((lena1 + lenb1 + lena2 + lenb2) > ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lena2 + lenb2;
+		stand20 = lena2 + lenb2 - 1;
+		lentemp = lena1 + lenb1 + lena2 + lenb2 + 2;
+	}
+	if ((lena1 + lenb1 + lena2 + lenb2) <= ((lenc1 + lenc2) * 2))
+	{
+		stand10 = lenc2 * 2;
+		stand20 = lenc2 * 2 - 1;
+		lentemp = (lenc1 + lenc2) * 2;
+	}
+
+	temp = (int*)malloc(sizeof(int)*lentemp);/*这里采用分配内存的方法来使用变量建立一定长度的数组*/
+
+	for (count = 0; count < lentemp; count++)/*initializing*/
+		temp[count] = 0;
+
+
+
+
+	finda2 = F_HA_FIND(a2, lena2, 1);
+	findb2 = F_HA_FIND(b2, lenb2, 1);
+
+
+	for (count = findb2; count >= 0; count--)
+	{
+		for (countp = finda2; countp >= 0; countp--)
+		{
+			temp[stand20 - count - countp - 1] += (b2[count] * a2[countp]);
+		}
+	}
+
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand10 + count + countp] += (b1[count] * a1[countp]);
+		}
+	}
+
+	for (count = 0; count < lenb1; count++)
+	{
+		for (countp = 0; countp <= finda2; countp++)
+		{
+			temp[stand20 + count - countp] += (b1[count] * a2[countp]);
+		}
+	}
+
+	for (count = 0; count <= findb2; count++)
+	{
+		for (countp = 0; countp < lena1; countp++)
+		{
+			temp[stand20 + countp - count] += (a1[countp] * b2[count]);
+		}
+	}
+
+
+	F_HA_MASINGLE(temp, lentemp);
+
+	//TEST
+	//printf("[乘法 内部temp]:");
+	//for (count = lentemp - 1; count >= 0; count--)
+	//	printf("%d", temp[count]);
+	//printf("\n");
+
+	for (count = 0; count < lenc2; count++)
+		c2[count] = temp[stand20 - count];
+	for (count = 0; count < lenc1; count++)
+		c1[count] = temp[stand10 + count];
+
+	free(temp);
+
+	return 0;
+}
+
+int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
 {
 	//Initializing C
 	F_HA_ZEROD(c1, c2, lenc1, lenc2);
@@ -734,6 +839,8 @@ int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int l
 	int ok = 0;
 	int check;
 
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
 	//Create array a
 	char *a1;
 	char *a2;
@@ -809,7 +916,286 @@ int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int l
 	return 0;
 }
 
+int F_HA_DIVB(char *a21, char *a22, double b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
+{
+	int count;
+	int tencount;
+	int ok = 0;
+	int check;
+	int lenb1 = 3;
+	int lenb2 = 3;
+	char b1[3];
+	char b2[3];
 
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	F_HA_TRANS(b, b1, b2, 3, 3);
+
+	//Create array a
+	char *a1;
+	char *a2;
+	a1 = (char*)malloc(sizeof(char)*lena1);
+	a2 = (char*)malloc(sizeof(char)*lena2);
+	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
+	char *a31;
+	char *a32;
+	a31 = (char*)malloc(sizeof(char)*lena1);
+	a32 = (char*)malloc(sizeof(char)*lena2);
+
+	//Create array d
+	char *d1;
+	char *d2;
+	int lend1 = lenc1 + lenb1;
+	int lend2 = lenc2 + lenb2;
+	d1 = (char*)malloc(sizeof(char)*lend1);
+	d2 = (char*)malloc(sizeof(char)*lend2);
+
+	F_HA_ZEROD(d1, d2, lend1, lend2);
+
+	for (count = lenc1; count >= 0; count--)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+	for (count = 0; count < lenc2; count++)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+
+	return 0;
+}
+
+int F_HA_DIVA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, int lenc1, int lenc2)
+{
+	int count;
+	int tencount;
+	int ok = 0;
+	int check;
+	char a21[3];
+	char a22[3];
+	int lena1 = 3;
+	int lena2 = 3;
+
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	F_HA_ZEROD(a21, a22, 3, 3);
+	F_HA_TRANS(a, a21, a22, 3, 3);
+
+	//Create array a
+	char *a1;
+	char *a2;
+	a1 = (char*)malloc(sizeof(char)*lena1);
+	a2 = (char*)malloc(sizeof(char)*lena2);
+	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
+	char *a31;
+	char *a32;
+	a31 = (char*)malloc(sizeof(char)*lena1);
+	a32 = (char*)malloc(sizeof(char)*lena2);
+
+	//Create array d
+	char *d1;
+	char *d2;
+	int lend1 = lenc1 + lenb1;
+	int lend2 = lenc2 + lenb2;
+	d1 = (char*)malloc(sizeof(char)*lend1);
+	d2 = (char*)malloc(sizeof(char)*lend2);
+
+	F_HA_ZEROD(d1, d2, lend1, lend2);
+
+	for (count = lenc1; count >= 0; count--)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+	for (count = 0; count < lenc2; count++)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+
+	return 0;
+}
+
+int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
+{
+	int count;
+	int tencount;
+	int ok = 0;
+	int check;
+	char a21[3];
+	char a22[3];
+	char b1[3];
+	char b2[3];
+	int lena1 = 3;
+	int lena2 = 3;
+	int lenb1 = 3;
+	int lenb2 = 3;
+
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	F_HA_ZEROD(a21, a22, 3, 3);
+	F_HA_TRANS(a, a21, a22, 3, 3);
+	F_HA_ZEROD(b1, b2, 3, 3);
+	F_HA_TRANS(b, b1, b2, 3, 3);
+
+	//F_HA_PRINT(a21, a22, 3, 3, 1);
+	//F_HA_PRINT(b1, b2, 3, 3, 1);
+
+	//Create array a
+	char *a1;
+	char *a2;
+	a1 = (char*)malloc(sizeof(char)*lena1);
+	a2 = (char*)malloc(sizeof(char)*lena2);
+	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
+	char *a31;
+	char *a32;
+	a31 = (char*)malloc(sizeof(char)*lena1);
+	a32 = (char*)malloc(sizeof(char)*lena2);
+
+	//Create array d
+	char *d1;
+	char *d2;
+	int lend1 = lenc1 + lenb1;
+	int lend2 = lenc2 + lenb2;
+	d1 = (char*)malloc(sizeof(char)*lend1);
+	d2 = (char*)malloc(sizeof(char)*lend2);
+
+	F_HA_ZEROD(d1, d2, lend1, lend2);
+
+	for (count = lenc1; count >= 0; count--)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+	for (count = 0; count < lenc2; count++)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+
+	return 0;
+}
 
 /*
 ====================程序报错====================

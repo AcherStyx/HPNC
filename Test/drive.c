@@ -22,7 +22,6 @@ int main(void)
 
 	int count;
 
-
 	//开始计算
 	error += F_HA_P(a1, a2, b1, b2, c1, c2, lena1, lena2, lenb1, lenb2, lenc1, lenc2);
 
@@ -251,7 +250,7 @@ int main(void)
 	flo = 2.2;
 	char floc1[10];
 	char floc2[10];
-	F_HA_MUF(a1, a2, flo, floc1, floc2, 10, 10, 10, 10);
+	F_HA_MUB(a1, a2, flo, floc1, floc2, 10, 10, 10, 10);
 	F_HA_PRINT(floc1, floc2, 10, 10, 1);
 
 	//malloc size test
@@ -275,6 +274,25 @@ int main(void)
 	F_HA_ZEROD(div1, div2, 10, 10);
 	F_HA_DIV(a1, a2, divi1, divi2, div1, div2, 10, 10, 2, 2, 10, 10);
 	F_HA_PRINT(div1, div2, 10, 10, 1);
+
+	//divef test
+	printf("【除法AB】\n");
+	float a = 3.21;
+	char divf1[5] = { 1,5,6,0,0 };
+	char divf2[5] = { 5,4,8,0,0 };
+	char divr1[10];
+	char divr2[10];
+	F_HA_ZEROD(divr1, divr2, 10, 10);
+	F_HA_DIVA(a, divf1, divf2, divr1, divr2, 5, 5, 10, 10);
+	F_HA_PRINT(divr1, divr2, 10, 10, 1);
+
+	printf("【除法C】\n");
+	float diva = 25.1;
+	float divb = 2.2;
+	char divr21[50];
+	char divr22[100];
+	F_HA_DIVC(diva, divb, divr21, divr22, 50, 100);
+	F_HA_PRINT(divr21, divr22, 50, 100, 1);
 
 	/*
 	//pi
@@ -369,6 +387,37 @@ int main(void)
 	F_HA_MU(ph1, ph2, p51, p52, ps31, ps32, lenph1, lenph2, lenp51, lenp52, lenps31, lenps32);
 	F_HA_MU(ps21, ps22, ps31, ps32, ps1, ps2, lenps21, lenps22, lenps31, lenps32, lenps1, lenps2);
 	F_HA_PRINT(ps1, ps2, lenps1, lenps2, 1);
+	*/
+
+	/*
+	printf("【圆周率】\n");
+	double pi1 = 1.0000000;
+	int zhengfu = -1;
+	char pia1[10];
+	char pia2[1000];
+	char pis1[10];
+	char pis2[1000];
+	double picount = 0;
+	char pib1[10];
+	char pib2[1000];
+	F_HA_ZEROD(pib1, pib2, 10, 1000);
+	F_HA_ZEROD(pia1, pia2, 10, 1000);
+
+	for (picount = 1.0000000; picount < 999; picount += 2)
+	{
+		zhengfu *= -1.000000;
+		F_HA_DIVC(pi1, picount, pis1, pis2, 10, 1000);
+		if (zhengfu > 0)
+			F_HA_P(pia1, pia2, pis1, pis2, pib1, pib2, 10, 1000, 10, 1000, 10, 1000);
+		else
+			F_HA_M(pia1, pia2, pis1, pis2, pib1, pib2, 10, 1000, 10, 1000, 10, 1000);
+
+		F_HA_MOVE(pib1, pib2, pia1, pia2, 10, 1000, 10, 1000);
+
+	}
+	float pi4 = 4.0;
+	F_HA_MUF(pia1, pia2, pi4, pib1, pib2, 10, 1000, 10, 1000);
+	F_HA_PRINT(pib1, pib2, 10, 1000, 1);
 	*/
 
 	//pause
