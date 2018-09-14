@@ -246,7 +246,7 @@ int main(void)
 	printf("分解得到的值：%d\n", floget);
 
 	//muf test
-	printf("【乘法 简化】\n");
+	printf("【乘法B】\n");
 	flo = 2.2;
 	char floc1[10];
 	char floc2[10];
@@ -293,6 +293,14 @@ int main(void)
 	char divr22[100];
 	F_HA_DIVC(diva, divb, divr21, divr22, 50, 100);
 	F_HA_PRINT(divr21, divr22, 50, 100, 1);
+
+	printf("【乘法C】\n");
+	double muca = 1.2;
+	double mucb = 5.2;
+	char mucc1[10];
+	char mucc2[10];
+	F_HA_MUC(muca, mucb, mucc1, mucc2, 10, 10);
+	F_HA_PRINT(mucc1, mucc2, 10, 10, 1);
 
 	/*
 	//pi
