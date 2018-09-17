@@ -302,6 +302,11 @@ int main(void)
 	F_HA_MUC(muca, mucb, mucc1, mucc2, 10, 10);
 	F_HA_PRINT(mucc1, mucc2, 10, 10, 1);
 
+	printf("【浮点数转化测试】\n");//error here
+	float ftrans = (float)2.8;
+	int ftransi = ftrans / 00.100;
+	printf("%d\n", ftransi);
+
 	/*
 	//pi
 	printf("【圆周率】\n");
@@ -427,6 +432,47 @@ int main(void)
 	F_HA_MUF(pia1, pia2, pi4, pib1, pib2, 10, 1000, 10, 1000);
 	F_HA_PRINT(pib1, pib2, 10, 1000, 1);
 	*/
+
+	F_HA_BAR('*', 60, 1);
+
+	printf("【最终测试】（录入测试用AB值）\n");
+	char ta1[100];
+	char ta2[100];
+	char tb1[100];
+	char tb2[100];
+	char tc1[100];
+	char tc2[100];
+	int lenta1 = 100;
+	int lenta2 = 100;
+	int lentb1 = 100;
+	int lentb2 = 100;
+	int lentc1 = 100;
+	int lentc2 = 100;
+	printf("A:\n");
+	F_HA_INPUT(ta1, ta2, lenta1, lenta2);
+	printf("B:\n");
+	F_HA_INPUT(tb1, tb2, lentb1, lentb2);
+
+	printf("【加法最终调试】\n");
+	printf("C:\n");
+	F_HA_P(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
+	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+
+	printf("【乘法最终调试】\n");
+	printf("C:\n");
+	F_HA_MU(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
+	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+
+	printf("【除法最终测试】\n");
+	printf("C:\n");
+	F_HA_DIV(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
+	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+
+	printf("【减法最终测试】\n");
+	printf("C:\n");
+	F_HA_M(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
+	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+
 
 	//pause
 	int quit;

@@ -3,6 +3,16 @@
 #include <math.h>
 #include <malloc.h>
 /*====================工具函数====================*/
+//打印Bar
+void F_HA_BAR(char what, int num,int enter)
+{
+	int count;
+	for (count = 0; count < num; count++)
+		putchar(what);
+	if (enter != 0)
+		putchar('\n');
+}
+//将包含整数与小数两个部分的两个数组打印成一个完整的小数
 void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 {
 	int count;
@@ -15,8 +25,8 @@ void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
 	if (printenter == 1)
 		printf("\n");
 }
-
-void F_HA_PRINTS(int *a, int len, int start, int enter)
+//打印单个数组，第三个参数可以选择从末尾还是从开头开始打印，0从开头，不为0从末尾
+void F_HA_PRINTS(char *a, int len, int start, int enter)
 {
 	int count;
 	if (start == 0)
@@ -31,22 +41,26 @@ void F_HA_PRINTS(int *a, int len, int start, int enter)
 	if (enter != 0)
 		printf("\n");
 }
-
+//找到第一个不为0的数，第三个参数决定从哪里开始寻找，0从头开始寻找，不为0从末尾开始，返回值是对应的数组下标
 int F_HA_FIND(char *a,int lena,char where)
 {
 	int count = 0;
-	if (where = 0)//where=0从0开始查找
+	if (where == 0)//where=0从0开始查找
+	{
 		for (count = 0; count < lena; count++)
 			if (a[count] != 0)
 				return count;
-	if (where = 1)//wwhere=1从末尾开始找
+	}
+	else//where=1从末尾开始找
+	{
 		for (count = (lena - 1); count >= 0; count--)
 			if (a[count] != 0)
 				return count;
+	}
 	return 0;
 }
-
-int F_HA_MA(char *a1, char *a2, int lena1, int lena2)//simple manage,only teens
+//低级整理，针对完整的两数组组成的小数，只能处理小于20、大于0的，用于加法
+int F_HA_MA(char *a1, char *a2, int lena1, int lena2)
 {
 	short mid=0;
 	int count;
@@ -88,7 +102,7 @@ int F_HA_MA(char *a1, char *a2, int lena1, int lena2)//simple manage,only teens
 	}
 	return mid;
 }
-
+//高级整理，针对完整的两数组组成的小数，能处理大于0的任意整理
 int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,could handle more work
 {
 	int count;
@@ -119,7 +133,7 @@ int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,coul
 
 	return mid;
 }
-
+//高级整理，只针对一组数组，能处理大于0的任意整理
 int F_HA_MASINGLE(int *temp,int len)
 {
 	int mid=0;/*initializing*/
@@ -139,14 +153,14 @@ int F_HA_MASINGLE(int *temp,int len)
 
 	return mid;
 }
-
+//累加，从最小一位开始进行的累加1，效率比较低
 int F_HA_ACC(char *a1, char *a2, int lena1, int lena2)
 {
 	a2[(lena2 - 1)] += 1;
 	F_HA_MA(a1, a2, lena1, lena2);
 	return 0;
 }
-
+//累加，从自定义位数开始累加1，最后一个参数n决定从哪里开始，自最后一位数起第n位开始累加
 int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
 {
 	if (n <= lena2 && n != 0)
@@ -157,7 +171,7 @@ int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
 	F_HA_MA(a1, a2, lena1, lena2);
 	return 0;
 }
-
+//累减，从自定义位数开始累减1，最后一个参数n决定从哪里开始，自最后一位数起第n位开始累减
 int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
 {
 	if (n <= lena2 && n != 0)
@@ -169,7 +183,7 @@ int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
 	
 	return 0;
 }
-
+//比大小a>b 0 ; a<b 1 ; a=b 2
 int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)
 {
 	int amaxplace;
@@ -270,19 +284,19 @@ int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int len
 
 	return mark;
 }
-
+//打印[test%d]
 void F_HA_TEST(short num)
 {
 	printf("[TEST%d]:\n", num);
 }
-
+//初始化，为单个数组填充0
 void F_HA_ZEROS(char *a, int len)
 {
 	int count;
 	for (count = 0; count < len; count++)
 		a[count] = 0;
 }
-
+//初始化，为两个数组组成的一个完整数填充0
 void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
 {
 	int count;
@@ -291,7 +305,7 @@ void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
 	for (count = 0; count < lena2; count++)
 		a2[count] = 0;
 }
-
+//将一个完整数的值移动到另一个上
 void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
 	int count;
@@ -316,7 +330,7 @@ void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int
 
 
 }
-
+//将一个浮点数转存到两个数组中
 void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 {
 	int floget1;
@@ -377,8 +391,70 @@ void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 
 
 }
+//获得用户输入的小数，转存到两个数组中形成一个完整数
+int F_HA_INPUT(char *a1, char *a2, int lena1, int lena2)
+{
+	//clear
+	F_HA_ZEROD(a1, a2, lena1, lena2);
+
+	int error=0;
+	int count=0;
+	int countp;
+	int mark;
+	char *temp;
+	int alllen = lena1 + lena2 + 2;
+	temp = (char*)malloc(sizeof(char)*alllen);
+	while ((temp[count] = getchar()) != '.')
+	{
+		temp[count] -= '0';
+		if (temp[count] >= 0 && temp[count] < 10)
+			count++;
+		else
+			error += 10;
+		if (count >= lena1)
+		{
+			printf("【!】整数部分超过给定位数\n");
+			error += 1;
+			break;
+		}
+	}
+	mark = count;
+	temp[count] = '.';
+	count++;
+	while ((temp[count] = getchar()) != '\n')
+	{
+		temp[count] -= '0';
+		if (temp[count] >= 0 && temp[count] < 10)
+			count++;
+		else
+			error += 10;
+		if (count >= (alllen-1))
+		{
+			printf("【!】小数部分超过给定位数\n");
+			error += 1;
+			break;
+		}
+	}
+	temp[count] = '\n';
+	for (countp = mark; countp > 0; countp--)
+	{
+		a1[mark - countp] = temp[countp - 1];
+	}
+	for (countp = mark; countp < (count-1); countp++)
+	{
+		a2[countp - mark] = temp[countp + 1];
+	}
+
+
+	printf("实际录入的值为：");
+	F_HA_PRINT(a1, a2, lena1, lena2, 1);
+
+	free(temp);
+	return error;
+}
 
 /*====================运算函数====================*/
+//加法
 int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
 	int error = 0;
@@ -443,7 +519,7 @@ int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 	return error;
 }
-
+//减法
 int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)//默认认为a>b
 {
 	//Initializing C
@@ -485,7 +561,7 @@ int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 	return 0;
 }
-
+//乘法
 int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
 	//Initializing C
@@ -575,7 +651,7 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 
 	return 0;
 }
-
+//乘法 MOD A 第一个数为浮点数
 int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, short lenc1, short lenc2)
 {
 	//Initializing C
@@ -672,7 +748,7 @@ int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int le
 
 	return 0;
 }
-
+//乘法 MOD B 第二个数为浮点数
 int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
 {
 	//Initializing C
@@ -769,7 +845,7 @@ int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int len
 
 	return 0;
 }
-
+//乘法 MOD C 两个数全为浮点数
 int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 {
 	//Initializing C
@@ -872,7 +948,7 @@ int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 
 	return 0;
 }
-
+//开根号
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
 	//Initialzing B
@@ -942,7 +1018,7 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 
 	return 0;
 }
-
+//除法
 int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
 	int count;
@@ -1026,97 +1102,7 @@ int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int l
 
 	return 0;
 }
-
-int F_HA_DIVB(char *a21, char *a22, double b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
-{
-	int count;
-	int tencount;
-	int ok = 0;
-	int check;
-	int lenb1 = 3;
-	int lenb2 = 3;
-	char b1[3];
-	char b2[3];
-
-	F_HA_ZEROD(c1, c2, lenc1, lenc2);
-
-	F_HA_TRANS(b, b1, b2, 3, 3);
-
-	//Create array a
-	char *a1;
-	char *a2;
-	a1 = (char*)malloc(sizeof(char)*lena1);
-	a2 = (char*)malloc(sizeof(char)*lena2);
-	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
-	char *a31;
-	char *a32;
-	a31 = (char*)malloc(sizeof(char)*lena1);
-	a32 = (char*)malloc(sizeof(char)*lena2);
-
-	//Create array d
-	char *d1;
-	char *d2;
-	int lend1 = lenc1 + lenb1;
-	int lend2 = lenc2 + lenb2;
-	d1 = (char*)malloc(sizeof(char)*lend1);
-	d2 = (char*)malloc(sizeof(char)*lend2);
-
-	F_HA_ZEROD(d1, d2, lend1, lend2);
-
-	for (count = lenc1; count >= 0; count--)
-	{
-		ok = 0;
-		for (tencount = 0; ok == 0; tencount++)
-		{
-			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
-			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
-			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
-			//printf("[除法内部]：\n");
-			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
-			if (tencount == 8)
-				ok = 1;
-			if (check == 2)
-				return 0;
-			if (check == 1)
-			{
-				ok = 1;
-				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
-				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
-				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
-				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
-			}
-		}
-	}
-
-	for (count = 0; count < lenc2; count++)
-	{
-		ok = 0;
-		for (tencount = 0; ok == 0; tencount++)
-		{
-			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
-			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
-			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
-			//printf("[除法内部]：\n");
-			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
-			if (tencount == 8)
-				ok = 1;
-			if (check == 2)
-				return 0;
-			if (check == 1)
-			{
-				ok = 1;
-				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
-				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
-				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
-				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
-			}
-		}
-	}
-
-
-	return 0;
-}
-
+//除法 MOD A 第一个数为浮点数
 int F_HA_DIVA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
 	int count;
@@ -1207,7 +1193,97 @@ int F_HA_DIVA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int l
 
 	return 0;
 }
+//除法 MOD B 第二个数为浮点数
+int F_HA_DIVB(char *a21, char *a22, double b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
+{
+	int count;
+	int tencount;
+	int ok = 0;
+	int check;
+	int lenb1 = 3;
+	int lenb2 = 3;
+	char b1[3];
+	char b2[3];
 
+	F_HA_ZEROD(c1, c2, lenc1, lenc2);
+
+	F_HA_TRANS(b, b1, b2, 3, 3);
+
+	//Create array a
+	char *a1;
+	char *a2;
+	a1 = (char*)malloc(sizeof(char)*lena1);
+	a2 = (char*)malloc(sizeof(char)*lena2);
+	F_HA_MOVE(a21, a22, a1, a2, lena1, lena2, lena1, lena2);
+	char *a31;
+	char *a32;
+	a31 = (char*)malloc(sizeof(char)*lena1);
+	a32 = (char*)malloc(sizeof(char)*lena2);
+
+	//Create array d
+	char *d1;
+	char *d2;
+	int lend1 = lenc1 + lenb1;
+	int lend2 = lenc2 + lenb2;
+	d1 = (char*)malloc(sizeof(char)*lend1);
+	d2 = (char*)malloc(sizeof(char)*lend2);
+
+	F_HA_ZEROD(d1, d2, lend1, lend2);
+
+	for (count = lenc1; count >= 0; count--)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, count + lenc2);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, count + lenc2);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+	for (count = 0; count < lenc2; count++)
+	{
+		ok = 0;
+		for (tencount = 0; ok == 0; tencount++)
+		{
+			F_HA_ACCP(c1, c2, lenc1, lenc2, lenc2 - count);
+			F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+			check = F_HA_COMP(a1, a2, d1, d2, lena1, lena2, lend1, lend2);
+			//printf("[除法内部]：\n");
+			//F_HA_PRINT(c1, c2, lenc1, lenc2, 1);
+			if (tencount == 8)
+				ok = 1;
+			if (check == 2)
+				return 0;
+			if (check == 1)
+			{
+				ok = 1;
+				F_HA_ACCM(c1, c2, lenc1, lenc2, lenc2 - count);
+				//F_HA_MU(c1, c2, b1, b2, d1, d2, lenc1, lenc2, lenb1, lenb2, lend1, lend2);
+				//F_HA_MOVE(a1, a2, a31, a32, lena1, lena2, lena1, lena2);
+				//F_HA_M(a21, a21, d1, d2, a1, a2, lena1, lena2, lend1, lend2, lena1, lena2);
+			}
+		}
+	}
+
+
+	return 0;
+}
+//除法 MOD C 两个数全为浮点数
 int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 {
 	int count;
