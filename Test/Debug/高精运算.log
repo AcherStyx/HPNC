@@ -1,17 +1,18 @@
 ﻿  drive.c
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(342): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(343): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(349): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(350): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(355): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(356): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(361): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(362): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(369): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(370): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(65): warning C4101: “count”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(358): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(359): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(365): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(366): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(371): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(372): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(377): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\function_ha.h(378): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
-e:\[工程项目]\[github]\hpnc\test\function_ha.h(334): warning C4101: “floget3”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(385): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(386): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(393): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(394): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(350): warning C4101: “floget3”: 未引用的局部变量
 e:\[工程项目]\[github]\hpnc\test\drive.c(241): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\drive.c(243): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\drive.c(250): warning C4305: “=”: 从“double”到“float”截断
@@ -21,4 +22,19 @@ e:\[工程项目]\[github]\hpnc\test\drive.c(290): warning C4305: “初始化�
 e:\[工程项目]\[github]\hpnc\test\drive.c(291): warning C4305: “初始化”: 从“double”到“float”截断
 e:\[工程项目]\[github]\hpnc\test\drive.c(307): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 e:\[工程项目]\[github]\hpnc\test\drive.c(239): warning C4101: “floget3”: 未引用的局部变量
+  Function_HA.h
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(65): warning C4101: “count”: 未引用的局部变量
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(358): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(359): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(365): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(366): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(371): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(372): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(377): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(378): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(385): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(386): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(393): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(394): warning C4244: “=”: 从“long double”转换到“int”，可能丢失数据
+e:\[工程项目]\[github]\hpnc\test\function_ha.h(350): warning C4101: “floget3”: 未引用的局部变量
   高精运算.vcxproj -> E:\[工程项目]\[GitHub]\HPNC\Test\Debug\高精运算.exe

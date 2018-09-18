@@ -12,37 +12,9 @@ void F_HA_BAR(char what, int num,int enter)
 	if (enter != 0)
 		putchar('\n');
 }
-//将包含整数与小数两个部分的两个数组打印成一个完整的小数
-void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
-{
-	int count;
-	for (count = (lena1 - 1); count >= 0; count--)
-		printf("%d", a1[count]);
-	printf(".");
-	for (count = 0; count < lena2; count++)
-		printf("%d", a2[count]);
 
-	if (printenter == 1)
-		printf("\n");
-}
-//打印单个数组，第三个参数可以选择从末尾还是从开头开始打印，0从开头，不为0从末尾
-void F_HA_PRINTS(char *a, int len, int start, int enter)
-{
-	int count;
-	if (start == 0)
-	{
-		for (count = 0; count < len; count++)
-			printf("%d", a[count]);
-	}
-	else
-		for (count = (len - 1); count >= 0; count--)
-			printf("%d", a[count]);
-
-	if (enter != 0)
-		printf("\n");
-}
 //找到第一个不为0的数，第三个参数决定从哪里开始寻找，0从头开始寻找，不为0从末尾开始，返回值是对应的数组下标
-int F_HA_FIND(char *a,int lena,char where)
+int F_HA_FIND(char *a, int lena, char where)
 {
 	int count = 0;
 	if (where == 0)//where=0从0开始查找
@@ -59,6 +31,49 @@ int F_HA_FIND(char *a,int lena,char where)
 	}
 	return 0;
 }
+
+//将包含整数与小数两个部分的两个数组打印成一个完整的小数
+void F_HA_PRINT(char *a1, char *a2, int lena1, int lena2,int printenter)
+{
+	int count;
+	for (count = (lena1 - 1); count >= 0; count--)
+		printf("%d", a1[count]);
+	printf(".");
+	for (count = 0; count < lena2; count++)
+		printf("%d", a2[count]);
+
+	if (printenter == 1)
+		printf("\n");
+}
+
+//打印单个数组，第三个参数可以选择从末尾还是从开头开始打印，0从开头，不为0从末尾
+void F_HA_PRINTS(char *a, int len, int start, int enter)
+{
+	int count;
+	if (start == 0)
+	{
+		for (count = 0; count < len; count++)
+			printf("%d", a[count]);
+	}
+	else
+		for (count = (len - 1); count >= 0; count--)
+			printf("%d", a[count]);
+
+	if (enter != 0)
+		printf("\n");
+}
+
+//打印一个完整的数，但是去掉两端多余的0
+void F_HA_PRINTC(char *a1, char *a2, int lena1, int lena2, int enter)
+{
+	int count;
+	int end1;
+	int end2;
+	end1 = F_HA_FIND(a1, lena1, 1) + 1;
+	end2 = F_HA_FIND(a2, lena2, 1) + 1;
+	F_HA_PRINT(a1, a2, end1, end2, enter);
+}
+
 //低级整理，针对完整的两数组组成的小数，只能处理小于20、大于0的，用于加法
 int F_HA_MA(char *a1, char *a2, int lena1, int lena2)
 {
@@ -102,6 +117,7 @@ int F_HA_MA(char *a1, char *a2, int lena1, int lena2)
 	}
 	return mid;
 }
+
 //高级整理，针对完整的两数组组成的小数，能处理大于0的任意整理
 int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,could handle more work
 {
@@ -133,6 +149,7 @@ int F_HA_MAP(char *a1, char *a2, int lena1, int lena2)//Manage plus version,coul
 
 	return mid;
 }
+
 //高级整理，只针对一组数组，能处理大于0的任意整理
 int F_HA_MASINGLE(int *temp,int len)
 {
@@ -153,6 +170,7 @@ int F_HA_MASINGLE(int *temp,int len)
 
 	return mid;
 }
+
 //累加，从最小一位开始进行的累加1，效率比较低
 int F_HA_ACC(char *a1, char *a2, int lena1, int lena2)
 {
@@ -160,6 +178,7 @@ int F_HA_ACC(char *a1, char *a2, int lena1, int lena2)
 	F_HA_MA(a1, a2, lena1, lena2);
 	return 0;
 }
+
 //累加，从自定义位数开始累加1，最后一个参数n决定从哪里开始，自最后一位数起第n位开始累加
 int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
 {
@@ -171,6 +190,7 @@ int F_HA_ACCP(char *a1, char *a2, int lena1, int lena2, int n)
 	F_HA_MA(a1, a2, lena1, lena2);
 	return 0;
 }
+
 //累减，从自定义位数开始累减1，最后一个参数n决定从哪里开始，自最后一位数起第n位开始累减
 int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
 {
@@ -183,6 +203,7 @@ int F_HA_ACCM(char *a1, char *a2, int lena1, int lena2, int n)
 	
 	return 0;
 }
+
 //比大小a>b 0 ; a<b 1 ; a=b 2
 int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int lenb1,int lenb2)
 {
@@ -284,11 +305,13 @@ int F_HA_COMP(char *a1, char *a2, char *b1, char *b2,int lena1,int lena2,int len
 
 	return mark;
 }
+
 //打印[test%d]
 void F_HA_TEST(short num)
 {
 	printf("[TEST%d]:\n", num);
 }
+
 //初始化，为单个数组填充0
 void F_HA_ZEROS(char *a, int len)
 {
@@ -296,6 +319,7 @@ void F_HA_ZEROS(char *a, int len)
 	for (count = 0; count < len; count++)
 		a[count] = 0;
 }
+
 //初始化，为两个数组组成的一个完整数填充0
 void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
 {
@@ -305,6 +329,7 @@ void F_HA_ZEROD(char *a1, char*a2, int lena1, int lena2)
 	for (count = 0; count < lena2; count++)
 		a2[count] = 0;
 }
+
 //将一个完整数的值移动到另一个上
 void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
@@ -330,6 +355,7 @@ void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int
 
 
 }
+
 //将一个浮点数转存到两个数组中
 void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 {
@@ -391,6 +417,7 @@ void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 
 
 }
+
 //获得用户输入的小数，转存到两个数组中形成一个完整数
 int F_HA_INPUT(char *a1, char *a2, int lena1, int lena2)
 {
@@ -447,7 +474,7 @@ int F_HA_INPUT(char *a1, char *a2, int lena1, int lena2)
 
 
 	printf("实际录入的值为：");
-	F_HA_PRINT(a1, a2, lena1, lena2, 1);
+	F_HA_PRINTC(a1, a2, lena1, lena2, 1);
 
 	free(temp);
 	return error;
@@ -519,6 +546,7 @@ int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 	return error;
 }
+
 //减法
 int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)//默认认为a>b
 {
@@ -561,6 +589,7 @@ int F_HA_M(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short len
 
 	return 0;
 }
+
 //乘法
 int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
@@ -651,6 +680,7 @@ int F_HA_MU(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short le
 
 	return 0;
 }
+
 //乘法 MOD A 第一个数为浮点数
 int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, short lenc1, short lenc2)
 {
@@ -748,6 +778,7 @@ int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int le
 
 	return 0;
 }
+
 //乘法 MOD B 第二个数为浮点数
 int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
 {
@@ -845,6 +876,7 @@ int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int len
 
 	return 0;
 }
+
 //乘法 MOD C 两个数全为浮点数
 int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 {
@@ -948,6 +980,7 @@ int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 
 	return 0;
 }
+
 //开根号
 int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int lenb1, int lenb2)
 {
@@ -1018,6 +1051,7 @@ int F_HA_ROOT(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int 
 
 	return 0;
 }
+
 //除法
 int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int lena1, int lena2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
@@ -1102,6 +1136,7 @@ int F_HA_DIV(char *a21, char *a22, char *b1, char *b2, char *c1, char *c2, int l
 
 	return 0;
 }
+
 //除法 MOD A 第一个数为浮点数
 int F_HA_DIVA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int lenb2, int lenc1, int lenc2)
 {
@@ -1193,6 +1228,7 @@ int F_HA_DIVA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int l
 
 	return 0;
 }
+
 //除法 MOD B 第二个数为浮点数
 int F_HA_DIVB(char *a21, char *a22, double b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
 {
@@ -1283,6 +1319,7 @@ int F_HA_DIVB(char *a21, char *a22, double b, char *c1, char *c2, int lena1, int
 
 	return 0;
 }
+
 //除法 MOD C 两个数全为浮点数
 int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 {

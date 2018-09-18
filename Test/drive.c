@@ -456,22 +456,22 @@ int main(void)
 	printf("【加法最终调试】\n");
 	printf("C:\n");
 	F_HA_P(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
-	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
 
 	printf("【乘法最终调试】\n");
 	printf("C:\n");
 	F_HA_MU(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
-	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
 
 	printf("【除法最终测试】\n");
 	printf("C:\n");
 	F_HA_DIV(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
-	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
 
 	printf("【减法最终测试】\n");
 	printf("C:\n");
 	F_HA_M(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
-	F_HA_PRINT(tc1, tc2, lentc1, lentc2, 1);
+	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
 
 
 	//pause
