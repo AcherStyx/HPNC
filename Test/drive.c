@@ -307,6 +307,20 @@ int main(void)
 	int ftransi = ftrans / 00.100;
 	printf("%d\n", ftransi);
 
+	printf("【次方测试】\n");
+	char po1[3] = { 9,0,0 };
+	char po2[10] = { 2 };
+	char poo1[3];
+	char poo2[10];
+	F_HA_POW(po1, po2, 3, 10, poo1, poo2, 3, 10, 3);
+	F_HA_PRINT(poo1, poo2, 3, 10, 1);
+
+	printf("【求和一个浮点数最接近的分数】");
+
+
+	printf("【开方测试】\n");
+
+
 	/*
 	//pi
 	printf("【圆周率】\n");
@@ -433,6 +447,9 @@ int main(void)
 	F_HA_PRINT(pib1, pib2, 10, 1000, 1);
 	*/
 
+	//====================================================================================================
+
+	/*
 	F_HA_BAR('*', 60, 1);
 
 	printf("【最终测试】（录入测试用AB值）\n");
@@ -472,6 +489,12 @@ int main(void)
 	printf("C:\n");
 	F_HA_M(ta1, ta2, tb1, tb2, tc1, tc2, lenta1, lenta2, lentb1, lentb2, lentc1, lentc2);
 	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
+	*/
+
+	//====================================================================================================
+
+	printf("【表达式识别】\n");
+	
 
 
 	//pause

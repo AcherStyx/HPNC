@@ -769,6 +769,7 @@ int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int le
 	//	printf("%d", temp[count]);
 	//printf("\n");
 
+	//更改在计算完成后应用到结果中，但c不可以为a,b之中的数字，因为在开头就对结果进行的初始化
 	for (count = 0; count < lenc2; count++)
 		c2[count] = temp[stand20 - count];
 	for (count = 0; count < lenc1; count++)
@@ -977,6 +978,34 @@ int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 		c1[count] = temp[stand10 + count];
 
 	free(temp);
+
+	return 0;
+}
+
+//n次方
+int F_HA_POW(char *a1, char *a2, int lena1, int lena2, char *b1, char *b2, int lenb1, int lenb2, int n)
+{
+	F_HA_ZEROD(b1, b2, lenb1, lenb2);
+
+	char *temp1;
+	char *temp2;
+
+	temp1 = (char*)malloc(sizeof(char)*lenb1);
+	temp2 = (char*)malloc(sizeof(char)*lenb2);
+
+	int count;
+
+	if (n >= 1)
+		F_HA_MOVE(a1, a2, b1, b2, lena1, lena2, lenb1, lenb2);
+
+	if (n >= 2)
+	{
+		for (count = 1; count < n; count++)
+		{
+			F_HA_MU(b1, b2, a1, a2, temp1, temp2, lenb1, lenb2, lena1, lena2, lenb1, lenb2);
+			F_HA_MOVE(temp1, temp2, b1, b2, lenb1, lenb2, lenb1, lenb2);
+		}
+	}
 
 	return 0;
 }
@@ -1421,6 +1450,8 @@ int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 	return 0;
 }
 
+//
+
 /*
 ====================程序报错====================
 ##加法
@@ -1436,4 +1467,4 @@ a=b 2
 数组中0为最接近小数点的一位
 数组长度不能为0（？）
 
-*/
+*/ 
