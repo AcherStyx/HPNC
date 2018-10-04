@@ -303,9 +303,11 @@ int main(void)
 	F_HA_PRINT(mucc1, mucc2, 10, 10, 1);
 
 	printf("【浮点数转化测试】\n");//error here
-	float ftrans = (float)2.8;
-	int ftransi = ftrans / 00.100;
-	printf("%d\n", ftransi);
+	double ftrans = 247.909;
+	char ftra1[3];
+	char ftra2[3];
+	F_HA_TRANS(ftrans, ftra1, ftra2, 3, 3);
+	F_HA_PRINT(ftra1, ftra2, 3, 3, 1);
 
 	printf("【次方测试】\n");
 	char po1[3] = { 9,0,0 };

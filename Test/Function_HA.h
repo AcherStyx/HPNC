@@ -357,38 +357,38 @@ void F_HA_MOVE(char *a1, char *a2, char *b1, char *b2, int lena1, int lena2, int
 }
 
 //将一个浮点数转存到两个数组中
-void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
+void F_HA_TRANS(double flo, char *a1, char *a2, int lena1, int lena2)
 {
 	int floget1;
 	int floget2;
 	int floget;
 	int floget3;
-	long double volum;
+	double volum;
 
 	F_HA_ZEROD(a1, a2, lena1, lena2);
 
 	if (lena1 >= 3)
 	{
-		volum = 100;
+		volum = 99.9999999999;
 		floget1 = flo / volum;
 		floget2 = (flo / volum) / 10;
 		floget = floget1 - floget2 * 10;
 		a1[2] = floget;
 	}
 
-	volum = 10;
+	volum = 9.9999999999;
 	floget1 = flo / volum;
 	floget2 = (flo / volum) / 10;
 	floget = floget1 - floget2 * 10;
 	a1[1] = floget;
 
-	volum = 1;
+	volum = 0.9999999999;
 	floget1 = flo / volum;
 	floget2 = (flo / volum) / 10;
 	floget = floget1 - floget2 * 10;
 	a1[0] = floget;
 
-	volum = 0.1;
+	volum = 0.09999999999;
 	floget1 = flo / volum;
 	floget2 = (flo / volum) / 10;
 	floget = floget1 - floget2 * 10;
@@ -396,7 +396,7 @@ void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 
 	printf("%d", floget2);
 
-	volum = 0.01;
+	volum = 0.009999999999;
 	floget1 = flo / volum;
 	floget2 = (flo / volum) / 10;
 	floget = floget1 - floget2 * 10;
@@ -404,7 +404,7 @@ void F_HA_TRANS(long double flo, char *a1, char *a2, int lena1, int lena2)
 
 	if (lena2 >= 3)
 	{
-		volum = 0.001;
+		volum = 0.0009999999999;
 		floget1 = flo / volum;
 		floget2 = (flo / volum) / 10;
 		floget = floget1 - floget2 * 10;
@@ -481,6 +481,7 @@ int F_HA_INPUT(char *a1, char *a2, int lena1, int lena2)
 }
 
 /*====================运算函数====================*/
+
 //加法
 int F_HA_P(char *a1, char *a2, char *b1, char *b2, char *c1, char *c2, short lena1, short lena2, short lenb1, short lenb2, short lenc1, short lenc2)
 {
@@ -781,7 +782,7 @@ int F_HA_MUA(double a, char *b1, char *b2, char *c1, char *c2, int lenb1, int le
 }
 
 //乘法 MOD B 第二个数为浮点数
-int F_HA_MUB(char *a1, char *a2, float b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
+int F_HA_MUB(char *a1, char *a2, double b, char *c1, char *c2, int lena1, int lena2, int lenc1, int lenc2)
 {
 	//Initializing C
 	F_HA_ZEROD(c1, c2, lenc1, lenc2);
@@ -1450,7 +1451,9 @@ int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 	return 0;
 }
 
-//
+
+
+
 
 /*
 ====================程序报错====================
