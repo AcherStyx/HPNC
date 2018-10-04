@@ -303,7 +303,7 @@ int main(void)
 	F_HA_PRINT(mucc1, mucc2, 10, 10, 1);
 
 	printf("【浮点数转化测试】\n");//error here
-	double ftrans = 247.909;
+	double ftrans = 1.1;
 	char ftra1[3];
 	char ftra2[3];
 	F_HA_TRANS(ftrans, ftra1, ftra2, 3, 3);
@@ -314,11 +314,17 @@ int main(void)
 	char po2[10] = { 2 };
 	char poo1[3];
 	char poo2[10];
-	F_HA_POW(po1, po2, 3, 10, poo1, poo2, 3, 10, 3);
+	F_HA_POWN(po1, po2, 3, 10, poo1, poo2, 3, 10, 3);
 	F_HA_PRINT(poo1, poo2, 3, 10, 1);
 
-	printf("【求和一个浮点数最接近的分数】");
-
+	printf("【求和一个浮点数最接近的分数】\n");
+	char tocom1[3] = { 9,1,0 };
+	char tocom2[10] = { 3,1,9 };
+	int toout[2];
+	F_HA_FTOFR(tocom1, tocom2, 3, 10, toout);
+	printf("输入的数为:");
+	F_HA_PRINT(tocom1, tocom2, 3, 10, 1);
+	printf("得到的分数为:%d/%d\n", toout[0], toout[1]);
 
 	printf("【开方测试】\n");
 

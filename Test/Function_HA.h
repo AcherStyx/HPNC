@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <malloc.h>
+/*====================定义常量====================*/
+#define PRECISION 1 //用在F_HA_INPUT中，决定分数和所给小数允许多大的误差，数字n表示误差小于E-(n+1)
 /*====================工具函数====================*/
 //打印Bar
 void F_HA_BAR(char what, int num,int enter)
@@ -66,7 +68,6 @@ void F_HA_PRINTS(char *a, int len, int start, int enter)
 //打印一个完整的数，但是去掉两端多余的0
 void F_HA_PRINTC(char *a1, char *a2, int lena1, int lena2, int enter)
 {
-	int count;
 	int end1;
 	int end2;
 	end1 = F_HA_FIND(a1, lena1, 1) + 1;
@@ -984,7 +985,7 @@ int F_HA_MUC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 }
 
 //n次方
-int F_HA_POW(char *a1, char *a2, int lena1, int lena2, char *b1, char *b2, int lenb1, int lenb2, int n)
+int F_HA_POWN(char *a1, char *a2, int lena1, int lena2, char *b1, char *b2, int lenb1, int lenb2, int n)
 {
 	F_HA_ZEROD(b1, b2, lenb1, lenb2);
 
@@ -1451,9 +1452,127 @@ int F_HA_DIVC(double a, double b, char *c1, char *c2, int lenc1, int lenc2)
 	return 0;
 }
 
+//求和一个数最接近的分数，第一个参数传递需要转换的浮点数，第二个参数传递一个有两个int类型元素的数组,num[0]为分子，num[1]为分母
+int F_HA_FTOFR(char *co1, char *co2, int lenco1, int lenco2, int *num)
+{
+	int len1 = lenco1;
+	int len2 = lenco2 + PRECISION;
+
+	char *com1;
+	char *com2;
+	com1 = (char*)malloc(sizeof(char)*len1);
+	com2 = (char*)malloc(sizeof(char)*len2);
+
+	F_HA_MOVE(co1, co2, com1, com2, lenco1, lenco2, len1, len2);
+
+	char *pre1;
+	char *pre2;
+	pre1 = (char*)malloc(sizeof(char)*len1);
+	pre2 = (char*)malloc(sizeof(char)*len2);
+
+	F_HA_ZEROD(pre1, pre2, len1, len2);
+	F_HA_ACCP(pre1, pre2, len1, len2, len2 - PRECISION);
+
+	//TEST
+	F_HA_PRINT(pre1, pre2, len1, len2, 1);
+
+	char out11[10] = { 1 };//分子
+	char out12[1] = { 0 };
+	char out21[10] = { 1 };//分母
+	char out22[1] = { 0 };
+	int lenout1 = 10;
+	int lenout2 = 1;
+	int comp = 0;
+
+	char *try1;
+	char *try2;
+	try1 = (char*)malloc(sizeof(char)*len1);//这里两个分配保守了，以后考虑好可以去掉点
+	try2 = (char*)malloc(sizeof(char)*len2);
+
+	char *trydiff1;//结果的误差
+	char *trydiff2;
+	trydiff1 = (char*)malloc(sizeof(char)*len1);//这里两个分配保守了，以后考虑好可以去掉点
+	trydiff2 = (char*)malloc(sizeof(char)*len2);
+
+	int count;
+	int tencount;
+	int tentemp;
+
+	while (comp == 0)
+	{
+		//比较决定增加哪个部分
+		F_HA_DIV(out11, out12, out21, out22, try1, try2, lenout1, lenout2, lenout1, lenout2, len1, len2);
+		comp = F_HA_COMP(try1, try2, com1, com2, len1, len2, len1, len2);
+		//TEST
+		F_HA_PRINT(out11, out12, lenout1, lenout2, 1);
+		F_HA_PRINT(out21, out22, lenout1, lenout2, 1);
+		F_HA_PRINT(try1, try2, len1, len2, 1);
+		
+		//增加值
+		if (comp == 1)
+			F_HA_ACCP(out11, out12, lenout1, lenout2, 2);
+		if (comp == 0)
+			F_HA_ACCP(out21, out22, lenout1, lenout2, 2);
+		if (comp == 2)
+			continue;
+
+		//再次比较，求误差
+		F_HA_DIV(out11, out12, out21, out22, try1, try2, lenout1, lenout2, lenout1, lenout2, len1, len2);//求此时分数值try
+		comp = F_HA_COMP(try1, try2, com1, com2, len1, len2, len1, len2);//决定用哪个减哪个得到的误差为正数
+		if (comp == 0)
+			F_HA_M(try1, try2, com1, com2, trydiff1, trydiff2, len1, len2, len1, len2, len1, len2);
+		if (comp == 1)
+			F_HA_M(com1, com2, try1, try2, trydiff1, trydiff2, len1, len2, len1, len2, len1, len2);
+		if (comp == 2)
+			continue;
+
+		//TEST
+		F_HA_PRINT(com1, com2, len1, len2, 1);
+		F_HA_PRINT(try1, try2, len1, len2, 1);
+		F_HA_PRINT(trydiff1, trydiff2, len1, len2, 1);
+
+		putchar('\n');
+
+		comp = F_HA_COMP(trydiff1, trydiff2, pre1, pre2, len1, len2, len1, len2);
+	}
+
+	num[1] = 0;
+	num[0] = 0;
+
+	for (count = 0; count < lenout1; count++)
+	{
+		if (out11[count] != 0)
+		{
+			tentemp = out11[count];
+			for (tencount = 0; tencount < count; tencount++)
+				tentemp *= 10;
+			num[0] += tentemp;
+		}
+	}
+
+	for (count = 0; count < lenout1; count++)
+	{
+		if (out21[count] != 0)
+		{
+			tentemp = out21[count];
+			for (tencount = 0; tencount < count; tencount++)
+				tentemp *= 10;
+			num[1] += tentemp;
+		}
+	}
+
+	return 0;
+}
+
+//次方
+int F_HA_POW(char *a1, char *a2, char *b1, char *b2, char *n1, char *n2, int lena1, int lena2, int lenb1, int lenb2, int lenn1, int lenn2)
+{
+	int markroot;
+	int mark;
 
 
-
+	return 0;
+}
 
 /*
 ====================程序报错====================
