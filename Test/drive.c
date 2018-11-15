@@ -2,9 +2,27 @@
 #include "Function_HA.h"
 #include <math.h>
 #include <stdlib.h>
-
+void test_define(void);
 int main(void)
 {
+	test_define();
+	return 0;
+}
+
+void test_define(void)
+{
+	int in[20][20];
+	gets(in[0]);
+
+	F_HA_EXPLAIN(in[0]);
+
+	return;
+}
+
+
+int maintemp(void)
+{
+	
 	char a1[10] = { 0,0,9,8,0,0,0,8,0,0 };
 	char a2[10] = { 0,0,0,1,0,0,1,0,2,4 };
 	char b1[5] = { 1,8,5,6,4 };
@@ -317,6 +335,7 @@ int main(void)
 	F_HA_POWN(po1, po2, 3, 10, poo1, poo2, 3, 10, 3);
 	F_HA_PRINT(poo1, poo2, 3, 10, 1);
 
+	/*
 	printf("【求和一个浮点数最接近的分数】\n");
 	char tocom1[3] = { 9,1,0 };
 	char tocom2[10] = { 3,1,9 };
@@ -325,10 +344,11 @@ int main(void)
 	printf("输入的数为:");
 	F_HA_PRINT(tocom1, tocom2, 3, 10, 1);
 	printf("得到的分数为:%d/%d\n", toout[0], toout[1]);
+	*/
 
 	printf("【开方测试】\n");
 
-
+	
 	/*
 	//pi
 	printf("【圆周率】\n");
@@ -499,6 +519,7 @@ int main(void)
 	F_HA_PRINTC(tc1, tc2, lentc1, lentc2, 1);
 	*/
 
+	
 	//====================================================================================================
 
 	printf("【表达式识别】\n");
@@ -510,7 +531,7 @@ int main(void)
 	for (quit = 0; quit != 1;)
 		scanf("%d", &quit);
 
-
+	
 
 	return 0;
 }

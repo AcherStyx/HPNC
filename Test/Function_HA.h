@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <malloc.h>
+#include <string.h>
 /*====================定义常量====================*/
 #define PRECISION 1 //用在F_HA_INPUT中，决定分数和所给小数允许多大的误差，数字n表示误差小于E-(n+1)
 /*====================工具函数====================*/
@@ -1574,6 +1575,140 @@ int F_HA_POW(char *a1, char *a2, char *b1, char *b2, char *n1, char *n2, int len
 	return 0;
 }
 
+/*====================识别式子====================*/
+int F_HA_DEFINE(const char *in, char nameout[][11], int lenout[][2], int *name_count)
+{
+	int len1 = 0;
+	int len2 = 0;
+	int cursor = 0;
+	char name[11] = { 0 };
+
+	while (in[cursor] != ' ')//排除说明字符
+		cursor++;
+	while (in[cursor] == ' ')//允许两个量之间多个空格
+		cursor++;
+
+	for (int i = 0; in[cursor] != ' '; i++, cursor++)//记录变量名字
+	{
+		if ((in[cursor] <= 'z'&&in[cursor] >= 'a') || (in[cursor] <= 'Z'&&in[cursor] >= 'A'))
+		{
+			name[i] = in[cursor];
+			if (i == 10)
+			{
+				name[i] = '0';
+				while (in[cursor] != ' ')
+				{
+					cursor++;
+					continue;
+				}
+				break;
+			}
+		}
+	}
+
+	while (in[cursor] == ' ')//允许两个量之间多个空格
+		cursor++;
+
+	while (in[cursor] != ' ')//记录第一个长度
+	{
+		if (in[cursor] <= '9'&&in[cursor] >= '0')
+		{
+			len1 *= 10;
+			len1 += in[cursor] - '0';
+			cursor++;
+		}
+		else
+			return -1;
+	}
+
+	while (in[cursor] == ' ')//允许两个量之间多个空格
+		cursor++;
+
+	while (in[cursor] != ' '&&in[cursor]!='\n'&&in[cursor]!='\0')//记录第二个长度
+	{
+		if (in[cursor] <= '9'&&in[cursor] >= '0')
+		{
+			len2 *= 10;
+			len2 += in[cursor] - '0';
+			cursor++;
+		}
+		else
+			return -2;
+	}
+
+	strncpy(nameout[*name_count], name, 11);
+	lenout[*name_count][0] = len1;
+	lenout[*name_count][1] = len2;
+	*name_count++;
+
+	return 0;
+}
+
+int F_HA_EXPLAIN(char *in)
+{
+	//利用全局变量计算
+	static char name[10][11];
+	static int name_count = 0;
+	static int len[10][2];
+	static char *single_line;//分解出的单行储存在这里
+	
+	single_line = (char*)malloc(sizeof(char) * 100);
+
+	int len1temp = 0;
+	int len2temp = 0;
+
+	int cursor = 0;
+	int i;
+	int error = 0;
+	int inlen;
+	inlen = strlen(in);
+
+	
+
+	//提取第一段文字
+	for (i = 0; in[cursor] != '\n'&&cursor < inlen; i++, cursor++)
+	{
+		single_line[i] = in[cursor];
+	}
+	single_line[i] = '\0';//格式化为字符串
+
+
+	switch (single_line[0])
+	{
+	case '#'://用#开头表示说明
+		switch (single_line[1])
+		{
+		case 'd'://define
+			char nametemp[11];
+			len1temp = 0;
+			len2temp = 0;
+			error = F_HA_DEFINE(single_line, name, len, &name_count);
+			if (error != 0)
+			{
+				printf("ERROER:定义错误\n");
+				break;
+			}
+			break;
+		case 'p'://print
+
+			break;
+		default:
+
+			break;
+		}
+	default:
+
+		break;
+	}
+	
+
+	return 0;
+	//-1 识别错误
+}
+
+
+
+
 /*
 ====================程序报错====================
 ##加法
@@ -1589,4 +1724,12 @@ a=b 2
 数组中0为最接近小数点的一位
 数组长度不能为0（？）
 
-*/ 
+
+
+====================输入示例====================
+#define a 100 100
+#define b 100 100
+#define c 100 50
+#c=a+b
+#print c
+*/
