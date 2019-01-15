@@ -2,11 +2,89 @@
 #include "Function_HA.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
+#include "HPNC.h"
+
+void test_plus(void);
+void test_multi(void);
+void test_minus(void);
 void test_define(void);
+
 int main(void)
 {
-	test_define();
+	int i;
+
+	for (i = 0; i < 10; i++)
+	{
+		test_plus();
+		putchar('\n');
+	}
+
 	return 0;
+}
+
+void test_plus(void)
+{
+	HP_NUM *a;
+	HP_NUM *b;
+	HP_NUM *c;
+
+	a = HPNC_Init(10, rand()%19+1);
+	b = HPNC_Init(10, rand()%19+1);
+	c = HPNC_Init(10, rand()%19+1);
+
+	HPNC_Randomdata(a);
+	HPNC_Randomdata(b);
+
+	HPNC_Print(a, 1);
+	HPNC_Print(b, 1);
+
+	HPNC_Plus(a, b, a);
+	HPNC_Print(a, 1);
+	HPNC_FreeArg(3, a, b, c);
+	return;
+}
+
+void test_multi(void)
+{
+	HP_NUM *a;
+	HP_NUM *b;
+	HP_NUM *c;
+
+	a = HPNC_Init(5, 20);
+	b = HPNC_Init(5, 20);
+	c = HPNC_Init(9, 40);
+
+	HPNC_Randomdata(a);
+	HPNC_Randomdata(b);
+
+	HPNC_Print(a, 1);
+	HPNC_Print(b, 1);
+
+	HPNC_Multi(a, b, c);
+	HPNC_Print(c, 1);
+
+	
+}
+
+void test_minus(void)
+{
+	HP_NUM *a;
+	HP_NUM *b;
+	HP_NUM *c;
+
+	a = HPNC_Init(10, rand() % 19 + 1);
+	b = HPNC_Init(10, rand() % 19 + 1);
+	c = HPNC_Init(10, rand() % 19 + 1);
+
+	HPNC_Randomdata(a);
+	HPNC_Randomdata(b);
+
+	HPNC_Print(a, 1);
+	HPNC_Print(b, 1);
+
+	HPNC_Minus(a, b, c);
+	HPNC_Print(c, 1);
 }
 
 void test_define(void)
