@@ -9,8 +9,7 @@
 #include <string.h>
 #include <time.h>
 /*■■■■■■■■■■■■■■■■■■■■■■■■■数据■■■■■■■■■■■■■■■■■■■■■■■■■*/
-
-/*使用的数*/
+/*=====使用的数=====*/
 typedef struct HP_NUM
 {
 	bool sign;	//0正 1负
@@ -27,10 +26,11 @@ struct
 	char message[HP_MESSAGE_LEN];
 	char function[HP_FUNCTION_LEN];
 }HPNC_ERROR;
-/*Debug模式*/
+/*=====Debug模式=====*/
 #define HPNC_DEBUG_ON
 #ifdef HPNC_DEBUG_ON
 #	define HPNC_DEBUG_PRINT_ERROR_ON
+#	define HPNC_DEBUG_PRINT_NUM_ON
 #endif
 /*■■■■■■■■■■■■■■■■■■■■■■■■■接口■■■■■■■■■■■■■■■■■■■■■■■■■*/
 
@@ -75,6 +75,27 @@ HP_NUM * HPNC_Init(int LENA, int LENB)
 	return temp;
 }
 
+/*>>>>>>>>>>初始化数
+可变参量*/
+void * HPNC_InitArg(int n, ...)
+{
+	va_list ap;
+	va_start(ap, n);
+	int i;
+
+	HP_NUM **temp;
+	int LENA;
+	int LENB;
+
+	for (i = 0; i < n; i++)
+	{
+		temp = va_arg(ap, HP_NUM**);
+		LENA = va_arg(ap, int);
+		LENB = va_arg(ap, int);
+		*temp = HPNC_Init(LENA, LENB);
+	}
+}
+
 /*>>>>>>>>>>释放内存
 释放初始化时为结构和结构内的数组分配的内存*/
 void HPNC_Free(HP_NUM *num)
@@ -84,6 +105,8 @@ void HPNC_Free(HP_NUM *num)
 	free(num);
 }
 
+/*>>>>>>>>>>释放内存
+可变参量*/
 void HPNC_FreeArg(int n, ...)
 {
 	va_list ap;
@@ -121,7 +144,7 @@ static void HPNC_ErrorInfo(const char * message, const char * function)
 从全局变量中打印输出错误信息到stderr流*/
 void HPNC_ShowErrorInfo(void)
 {
-#ifdef HPNC_DEBUG_PRINT_ERROR
+#ifdef HPNC_DEBUG_PRINT_ERROR_ON
 	int i;
 	int ii;
 
@@ -168,6 +191,7 @@ void HPNC_Zero(HP_NUM * num)
 打印一个完整的数，但是去掉两端多余的0*/
 void HPNC_Print(HP_NUM * num, int mod)
 {
+#ifdef HPNC_DEBUG_PRINT_NUM_ON
 	int count;
 	for (count = ((num->LENA) - 1); count >= 0; count--)
 		printf("%d", num->A[count]);
@@ -177,6 +201,7 @@ void HPNC_Print(HP_NUM * num, int mod)
 
 	if (mod%10 == 1)
 		printf("\n");
+#endif
 }
 
 /*>>>>>>>>>>最大值
@@ -491,16 +516,13 @@ bool HPNC_Plus(HP_NUM *a, HP_NUM *b, HP_NUM *c)
 #ifdef HPNC_DEBUG_ON
 	HPNC_ErrorInfo(NULL, NULL);	//重置错误消息
 	HPNC_ErrorInfo(NULL, "Plus");
-
 	/*整数部分溢出检查*/
 	if (mid == 1)
 	{
 		HPNC_ErrorInfo("[Overflow]|", NULL);
 		error = 1;
 	}
-	
 	/*小数部分长度的检查*/
-	
 	if (temp->LENB < HPNC_Min(2, a->LENB, b->LENB))
 	{
 		if (frac_precision_lose == 1)
@@ -535,12 +557,10 @@ bool HPNC_Plus(HP_NUM *a, HP_NUM *b, HP_NUM *c)
 			}
 		}
 	}
-
 #ifdef HPNC_DEBUG_PRINT_ERROR_ON
 	HPNC_ShowErrorInfo();
 #endif
 #endif
-
 	free(c->A);
 	free(c->B);
 	*c = *temp;
@@ -552,6 +572,10 @@ bool HPNC_Plus(HP_NUM *a, HP_NUM *b, HP_NUM *c)
 temp=a-b*/
 bool HPNC_Minus(HP_NUM * a,HP_NUM *b,HP_NUM *c)//默认认为a>b
 {
+#ifdef HPNC_DEBUG_ON
+	HPNC_ErrorInfo(NULL, NULL);	//重置错误消息
+	HPNC_ErrorInfo(NULL, "Plus");
+#endif
 	HPNC_Zero(c);
 
 	int i = 0;
@@ -561,38 +585,136 @@ bool HPNC_Minus(HP_NUM * a,HP_NUM *b,HP_NUM *c)//默认认为a>b
 	
 	mark = HPNC_Min(3, a->LENB, b->LENB, c->LENB);	/*找到小数部分符合要求，能正常完成运算的最后一位*/
 
-	if (c->LENB > HPNC_Min(2, a->LENB, b->LENB))
+	if (c->LENB < HPNC_Min(2, a->LENB, b->LENB))
 	{
 		if (a->LENB > b->LENB)
 		{
-			if (c->LENB < a->LENB)
+			for (i = a->LENB - 1; i >= b->LENB; i--)
 			{
-				for (i = b->LENB; i < c->LENB&&i < a->LENB; i++)
-					c->B[i] = a->B[i];
+				if (a->B[i] - 0 - mid < 0)
+				{
+					mid = 1;
+				}
+				else
+					mid = 0;
+			}
+			for (i = b->LENB - 1; i >= c->LENB; i--)
+			{
+				if (a->B[i] - b->B[i] - mid < 0)
+				{
+					mid = 1;
+				}
+				else
+					mid = 0;
 			}
 		}
-		else if (a->LENB < b->LENB)
+		else
 		{
-			if (c->LENB < b->LENB)
+			for (i = b->LENB - 1; i >= a->LENB; i--)
 			{
-				for (i = HPNC_Min(2, c->LENB, b->LENB) - 1; i >= a->LENB; i--)
+				if (0 - b->LENB - mid < 0)
 				{
-					c->B[i] = 0 - b->B[i] - mid;
-					if (c->B[i] < 0)
-					{
-						c->B[i] += 10;
-						mid = 1;
-					}
-					else
-						mid = 0;
+					mid = 1;
 				}
+				else
+					mid = 0;
+			}
+			for (i = a->LENB - 1; i >= c->LENB; i--)
+			{
+				if (a->B[i] - b->B[i] - mid < 0)
+				{
+					mid = 1;
+				}
+				else
+					mid = 0;
+			}
+		}
+	}
+	else if (c->LENB < HPNC_Max(2, a->LENB, b->LENB))
+	{
+		if (a->LENB > b->LENB)
+		{
+			for (i = b->LENB; i < c->LENB&&i < a->LENB; i++)
+				c->B[i] = a->B[i];
+		}
+		else
+		{
+			for (i = b->LENB - 1; i >= c->LENB; i--)
+			{
+				if (b->B[i] != 0)
+					mid = 1;
+			}
+			for (i = c->LENB - 1; i >= HPNC_Min(2, a->LENB, b->LENB); i--)
+			{
+				c->B[i] = 0 - b->B[i] - mid;
+				if (c->B[i] < 0)
+				{
+					c->B[i] += 10;
+					mid = 1;
+				}
+				else
+					mid = 0;
 			}
 		}
 	}
 	else
 	{
+		if (a->LENB > b->LENB)
+		{
+			for (i = b->LENB; i < a->LENB&&i < a->LENB; i++)
+				c->B[i] = a->B[i];
+		}
+		else
+		{
+			for (i = b->LENB - 1; i >= HPNC_Min(2, a->LENB, b->LENB); i--)
+			{
+				c->B[i] = 0 - b->B[i] - mid;
+				if (c->B[i] < 0)
+				{
+					c->B[i] += 10;
+					mid = 1;
+				}
+				else
+					mid = 0;
+			}
+		}
+	}
+	
+#ifdef HPNC_DEBUG_ON
+	if (c->LENB < HPNC_Min(2, a->LENB, b->LENB))
+	{
+
+		if (mid == 1)
+		{
+			error = 1;
+			HPNC_ErrorInfo("[Precision Lose] c->LENB < Min(a->LENB,b->LENB)|", "Minus");
+		}
 
 	}
+	else if (c->LENB < HPNC_Max(2, a->LENB, b->LENB))
+	{
+		if (a->LENB > b->LENB)
+		{
+			for (i = b->LENB; i < a->LENB; i++)
+			{
+				if (a->B[i] != 0)
+				{
+					error = 1;
+					HPNC_ErrorInfo("[Precision Lose] Min(a->LENB,b->LENB) < c->LENB < Max(a->LENB,b->LENB)|", "Minus");
+					break;
+				}
+			}
+		}
+		else
+		{
+			if (mid == 1)
+			{
+				error = 1;
+				HPNC_ErrorInfo("[Precision Lose] Min(a->LENB,b->LENB) <= c->LENB < Max(a->LENB,b->LENB)|", "Minus");
+			}
+		}
+	}
+#endif
 	for (i = mark - 1; i >= 0; i--)
 	{
 		c->B[i] = a->B[i] - b->B[i] - mid;
@@ -605,7 +727,6 @@ bool HPNC_Minus(HP_NUM * a,HP_NUM *b,HP_NUM *c)//默认认为a>b
 			mid = 0;
 	}
 	
-
 	mark = HPNC_Min(3, a->LENA, b->LENA, c->LENA);
 	for (i = 0; i < mark; i++)
 	{
@@ -690,6 +811,10 @@ bool HPNC_Minus(HP_NUM * a,HP_NUM *b,HP_NUM *c)//默认认为a>b
 			mid = 0;
 		}
 	}
+
+#ifdef HPNC_DEBUG_PRINT_ERROR_ON
+	HPNC_ShowErrorInfo();
+#endif
 
 	return 0;
 }
@@ -788,7 +913,7 @@ int HPNC_Multi(HP_NUM *a, HP_NUM *b, HP_NUM *c)
 	{
 		for (i = c->LENB - 1; i >= 0; i--)
 		{
-			if (temp[i] != 0)
+			if (temp[mark_B0 - i] != 0)
 			{
 				HPNC_ErrorInfo("[Precision Lose]|", NULL);
 				error = 1;

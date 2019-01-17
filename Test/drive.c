@@ -6,20 +6,19 @@
 #include "HPNC.h"
 
 void test_plus(void);
-void test_multi(void);
 void test_minus(void);
+void test_multi(void);
+void test_plusandminus(void);
 void test_define(void);
 
 int main(void)
 {
 	int i;
-
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 100; i++)
 	{
-		test_plus();
+		test_multi();
 		putchar('\n');
 	}
-
 	return 0;
 }
 
@@ -44,29 +43,6 @@ void test_plus(void)
 	HPNC_FreeArg(3, a, b, c);
 	return;
 }
-
-void test_multi(void)
-{
-	HP_NUM *a;
-	HP_NUM *b;
-	HP_NUM *c;
-
-	a = HPNC_Init(5, 20);
-	b = HPNC_Init(5, 20);
-	c = HPNC_Init(9, 40);
-
-	HPNC_Randomdata(a);
-	HPNC_Randomdata(b);
-
-	HPNC_Print(a, 1);
-	HPNC_Print(b, 1);
-
-	HPNC_Multi(a, b, c);
-	HPNC_Print(c, 1);
-
-	
-}
-
 void test_minus(void)
 {
 	HP_NUM *a;
@@ -85,8 +61,59 @@ void test_minus(void)
 
 	HPNC_Minus(a, b, c);
 	HPNC_Print(c, 1);
-}
 
+
+	HPNC_FreeArg(3, a, b, c);
+}
+void test_multi(void)
+{
+	HP_NUM *a;
+	HP_NUM *b;
+	HP_NUM *c;
+
+	a = HPNC_Init(5, 20);
+	b = HPNC_Init(5, 20);
+	c = HPNC_Init(9, 40);
+
+	HPNC_Randomdata(a);
+	HPNC_Randomdata(b);
+
+	HPNC_Print(a, 1);
+	HPNC_Print(b, 1);
+
+	HPNC_Multi(a, b, c);
+	HPNC_Print(c, 1);
+}
+void test_plusandminus(void)
+{
+	HP_NUM *a;
+	HP_NUM *b;
+	HP_NUM *c;
+	HP_NUM *d;
+
+	a = HPNC_Init(10, 19);
+	b = HPNC_Init(10, 10);
+	c = HPNC_Init(10, 20);
+	d = HPNC_Init(10, 20);
+
+	HPNC_Randomdata(a);
+	HPNC_Randomdata(b);
+
+	HPNC_Print(a, 1);
+	HPNC_Print(b, 1);
+
+	HPNC_Plus(a, b, c);
+	HPNC_Print(c, 1);
+
+	HPNC_Minus(c, b, d);
+	HPNC_Print(a, 1);
+	HPNC_Minus(d, a, c);
+	HPNC_Print(c, 1);
+
+	HPNC_FreeArg(4, a, b, c, d);
+
+	return;
+}
 void test_define(void)
 {
 	int in[20][20];
@@ -96,8 +123,6 @@ void test_define(void)
 
 	return;
 }
-
-
 int maintemp(void)
 {
 	
